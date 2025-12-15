@@ -1,0 +1,72 @@
+import { ReactNode } from 'react'
+
+import { BackgroundGlow } from '@/shared/components/custom'
+import { AnimatedIcons } from '@/shared/components/custom/animated-icons'
+import { TaskFlowLogo } from '@/shared/components/custom/task-flow-logo'
+
+export default function AuthLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
+  return (
+    <div className="bg-background text-foreground min-h-screen">
+      {/* page container */}
+      <div className="mx-auto grid min-h-screen w-full grid-cols-1 md:grid-cols-2">
+        {/* LEFT: brand + messaging */}
+        <div className="relative hidden items-center justify-center p-8 md:flex">
+          {/* background glow */}
+          <BackgroundGlow />
+
+          <div className="relative z-10 max-w-md">
+            {/* logo */}
+            <TaskFlowLogo />
+
+            {/* heading */}
+            <h1 className="text-4xl leading-tight font-semibold tracking-tight md:text-5xl">
+              organize tarefas <br />
+              <span className="text-primary">com foco e clareza</span>
+            </h1>
+
+            {/* short description */}
+            <p className="text-muted-foreground mt-4 text-base">
+              Planeje, acompanhe e conclua tarefas com mais produtividade.
+              Centralize prazos, prioridades e colaboração em um único lugar.
+            </p>
+
+            {/* animated icons */}
+            <AnimatedIcons />
+          </div>
+        </div>
+
+        {/* RIGHT: auth content */}
+        <div className="flex w-full flex-col items-center justify-center">
+          {children}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+        }
+
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-float-slow {
+          animation: float 4.5s ease-in-out infinite;
+        }
+
+        .animate-float-delay {
+          animation: float 3.5s ease-in-out infinite;
+          animation-delay: 1s;
+        }
+      `}</style>
+    </div>
+  )
+}
