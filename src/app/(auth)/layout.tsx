@@ -46,31 +46,6 @@ export default function AuthLayout({
           {children}
         </div>
       </div>
-
-      <style>{`
-        @keyframes float {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-6px);
-          }
-        }
-
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-
-        .animate-float-slow {
-          animation: float 4.5s ease-in-out infinite;
-        }
-
-        .animate-float-delay {
-          animation: float 3.5s ease-in-out infinite;
-          animation-delay: 1s;
-        }
-      `}</style>
     </div>
   )
 }

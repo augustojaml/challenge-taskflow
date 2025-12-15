@@ -25,6 +25,30 @@ const AnimatedIcons = () => {
       <div className="bg-chart-1/15 text-chart-1 animate-float flex h-9 w-9 items-center justify-center rounded-full">
         <UsersIcon className="h-4 w-4" />
       </div>
+      <style>{`
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-6px);
+          }
+        }
+
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-float-slow {
+          animation: float 4.5s ease-in-out infinite;
+        }
+
+        .animate-float-delay {
+          animation: float 3.5s ease-in-out infinite;
+          animation-delay: 1s;
+        }
+      `}</style>
     </div>
   )
 }
