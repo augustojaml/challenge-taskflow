@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 
-import { UserEntity } from '@/shared/domain/auth/domain/entities/user.entity'
-import { AuthUserRepositoryPort } from '@/shared/domain/auth/domain/repositories/user-repository-port'
+import { UserEntity } from '@/shared/core/auth/domain/entities/user.entity'
+import { AuthUserRepositoryPort } from '@/shared/core/auth/domain/repositories/user-repository-port'
 import { passwordCrypto } from '@/shared/helpers/password'
 
 type UserFakeParams = {

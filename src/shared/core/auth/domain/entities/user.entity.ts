@@ -1,5 +1,5 @@
-import { Entity } from '@/shared/core/entity'
-import { OptionalType } from '@/shared/core/optional'
+import { Entity } from '@/shared/core/abstracts/entity'
+import { OptionalType } from '@/shared/core/types/optional'
 
 type UserEntityProps = {
   name: string

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LoginUserService } from '@/feature/auth/services/login-user-service'
-import { UnauthorizedError } from '@/shared/domain/errors/unauthorized-error'
+import { UnauthorizedError } from '@/shared/core/errors/unauthorized-error'
 import { passwordCrypto } from '@/shared/helpers/password'
 
 import { userFakeRepo } from '../fakes/user-fake'

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 enum ErrorCodes {
   VALIDATION_ERROR = 'VALIDATION_ERROR',
   RESOURCE_NOT_FOUND = 'RESOURCE_NOT_FOUND',

@@ -1,4 +1,4 @@
-import { ErrorCodes } from '@/shared/core/error-codes'
+import { ErrorCodes } from '../enums/error-codes'
 
 class BaseError extends Error {
   public readonly statusCode: number

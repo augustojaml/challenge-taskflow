@@ -1,6 +1,5 @@
-import { ErrorCodes } from '@/shared/core/error-codes'
-
-import { BaseError } from './base-error'
+import { BaseError } from '../abstracts/base-error'
+import { ErrorCodes } from '../enums/error-codes'
 
 export class UnauthorizedError extends BaseError {
   constructor() {

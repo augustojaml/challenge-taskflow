@@ -1,5 +1,5 @@
-import { AuthUserRepositoryPort } from '@/shared/domain/auth/domain/repositories/user-repository-port'
-import { UnauthorizedError } from '@/shared/domain/errors/unauthorized-error'
+import { AuthUserRepositoryPort } from '@/shared/core/auth/domain/repositories/user-repository-port'
+import { UnauthorizedError } from '@/shared/core/errors/unauthorized-error'
 import { passwordCrypto } from '@/shared/helpers/password'
 
 import {

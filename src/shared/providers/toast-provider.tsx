@@ -35,7 +35,6 @@ interface ToastItem extends ShowToastOptions {
 }
 
 interface CustomToastContextProps {
-  // eslint-disable-next-line no-unused-vars
   showToast: (options: ShowToastOptions) => void
 }
 

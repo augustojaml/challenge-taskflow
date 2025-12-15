@@ -1,5 +1,5 @@
-import { UserEntity } from '@/shared/domain/auth/domain/entities/user.entity'
-import { AuthUserRepositoryPort } from '@/shared/domain/auth/domain/repositories/user-repository-port'
+import { UserEntity } from '@/shared/core/auth/domain/entities/user.entity'
+import { AuthUserRepositoryPort } from '@/shared/core/auth/domain/repositories/user-repository-port'
 
 class InMemoryUserRepository implements AuthUserRepositoryPort {
   public users: UserEntity[] = []
@@ -7,6 +7,7 @@ class InMemoryUserRepository implements AuthUserRepositoryPort {
     this.users.push(user)
     return Promise.resolve(user)
   }
+
   async findByEmail(email: string): Promise<UserEntity | null> {
     const user = this.users.find((u) => u.email === email)
     return Promise.resolve(user ?? null)

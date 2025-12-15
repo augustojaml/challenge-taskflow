@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { RegisterUserService } from '@/feature/auth/services/register-user-service'
-import { ResourceAlreadyExistsError } from '@/shared/domain/errors/resource-already-exists-error'
+import { ResourceAlreadyExistsError } from '@/shared/core/errors/resource-already-exists-error'
 import { passwordCrypto } from '@/shared/helpers/password'
 
 import { userFaker } from '../fakes/user-fake'

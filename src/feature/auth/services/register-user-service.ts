@@ -1,6 +1,6 @@
-import { UserEntity } from '@/shared/domain/auth/domain/entities/user.entity'
-import { AuthUserRepositoryPort } from '@/shared/domain/auth/domain/repositories/user-repository-port'
-import { ResourceAlreadyExistsError } from '@/shared/domain/errors/resource-already-exists-error'
+import { UserEntity } from '@/shared/core/auth/domain/entities/user.entity'
+import { AuthUserRepositoryPort } from '@/shared/core/auth/domain/repositories/user-repository-port'
+import { ResourceAlreadyExistsError } from '@/shared/core/errors/resource-already-exists-error'
 import { passwordCrypto } from '@/shared/helpers/password'
 
 import {

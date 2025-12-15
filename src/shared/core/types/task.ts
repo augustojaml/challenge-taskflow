@@ -1,3 +1,4 @@
+import type { TaskPriority } from './task-priority'
 import type { TaskStatus } from './task-status'
 import type { User } from './user'
 
@@ -7,10 +8,11 @@ type Task = {
   id: string
   title: string
   description: string
-  status: TaskStatus
   dueDate: Date
-  userId: string
-  user: TaskUser | null
+  priority: TaskPriority
+  status: TaskStatus
+  creatorId: string
+  creator: TaskUser | null
   createdAt: Date
   updatedAt: Date
 }

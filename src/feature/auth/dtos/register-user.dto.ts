@@ -1,5 +1,5 @@
-import { User } from '@/shared/core/user'
-import { UserEntity } from '@/shared/domain/auth/domain/entities/user.entity'
+import { UserEntity } from '@/shared/core/auth/domain/entities/user.entity'
+import { User } from '@/shared/core/types/user'
 
 type RegisterUserParamsDto = Pick<User, 'name' | 'email'> & {
   password: string
