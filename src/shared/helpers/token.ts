@@ -1,7 +1,7 @@
 import jwt, { SignOptions } from 'jsonwebtoken'
 
 interface JWTPayload {
-  userId: number
+  userId: string
   email: string
 }
 

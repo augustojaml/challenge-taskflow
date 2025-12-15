@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { registerUserSchema } from '@/features/auth/schemas/register-user-schema'
+import { loginUserSchema } from '@/features/auth/schemas/login-user-schema'
 import { authUserFactory } from '@/shared/databases/prisma/factories/auth-user-factory'
+import { tokenJWT } from '@/shared/helpers'
 
 /**
  * @swagger
- * /api/auth/register:
+ * /api/auth/login:
  *   post:
- *     summary: Registro de novos usuários
- *     description: Cria uma nova conta de usuário com validação de email único e senha forte
+ *     summary: Login de usuários
+ *     description: Autentica um usuário e retorna um token JWT válido
  *     tags:
  *       - Auth
  *     requestBody:
@@ -18,43 +19,38 @@ import { authUserFactory } from '@/shared/databases/prisma/factories/auth-user-f
  *           schema:
  *             type: object
  *             required:
- *               - name
  *               - email
  *               - password
  *             properties:
- *               name:
- *                 type: string
- *                 example: João Silva
  *               email:
  *                 type: string
  *                 format: email
  *                 example: joao@example.com
  *               password:
  *                 type: string
- *                 minLength: 8
  *                 example: senha123456
  *     responses:
- *       201:
- *         description: Usuário criado com sucesso
+ *       200:
+ *         description: Login realizado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 token:
  *                   type: string
- *                   example: Usuário criado com sucesso
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *                 user:
  *                   type: object
  *                   properties:
  *                     id:
- *                       type: integer
+ *                       type: string
  *                     name:
  *                       type: string
  *                     email:
  *                       type: string
- *       400:
- *         description: Usuário já cadastrado ou dados inválidos
+ *       401:
+ *         description: Email ou senha inválidos
  *         content:
  *           application/json:
  *             schema:
@@ -67,7 +63,7 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
-    const validationSchema = registerUserSchema.safeParse(data)
+    const validationSchema = loginUserSchema.safeParse(data)
 
     if (!validationSchema.success) {
       return NextResponse.json(
@@ -76,22 +72,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { name, email, password } = validationSchema.data
+    const { email, password } = validationSchema.data
 
-    const factory = authUserFactory.registerUser()
+    const factory = authUserFactory.loginUser()
 
-    const result = await factory.execute({ name, email, password })
+    const result = await factory.execute({ email, password })
 
-    return NextResponse.json(
-      {
-        message: 'Usuário criado com sucesso',
-        user: result.user,
-      },
-      { status: 201 },
-    )
+    // Gerar token JWT
+    const token = tokenJWT.generateToken({
+      userId: result.user.id,
+      email: result.user.email,
+    })
+
+    return NextResponse.json({
+      token,
+      user: result.user,
+    })
   } catch (error) {
     return NextResponse.json(
-      { error: error },
+      { error: error instanceof Error ? error.message : 'Erro ao fazer login' },
       {
         status:
           error instanceof Error && 'statusCode' in error

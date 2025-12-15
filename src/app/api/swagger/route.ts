@@ -1,3 +1,5 @@
+import { resolve } from 'node:path'
+
 import { NextResponse } from 'next/server'
 import swaggerJsdoc from 'swagger-jsdoc'
 
@@ -26,7 +28,9 @@ const options: swaggerJsdoc.Options = {
       },
     },
   },
-  apis: ['app/api/**/*.ts'],
+  apis: [
+    resolve(process.cwd(), 'src/app/api/**/*.ts'), // Caminho absoluto para os arquivos com anotações Swagger
+  ],
 }
 
 const swaggerSpec = swaggerJsdoc(options)
