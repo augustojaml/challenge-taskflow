@@ -1,4 +1,4 @@
-import { ErrorPage } from '@/shared/components/custom/error-page'
+import { ErrorPage } from '@/shared/components'
 
 export default function NotFound() {
   return (

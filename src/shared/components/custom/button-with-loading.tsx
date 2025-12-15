@@ -1,7 +1,7 @@
 import { Loader2, LucideIcon } from 'lucide-react'
 import { ComponentProps } from 'react'
 
-import { cn } from '@/shared/libs/utils'
+import { cn } from '@/shared/libs'
 
 import { Button } from '../shadcn/button'
 

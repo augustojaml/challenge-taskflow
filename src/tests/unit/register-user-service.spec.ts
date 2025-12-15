@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { ResourceAlreadyExistsError } from '@/shared/core/errors/resource-already-exists-error'
+import { UserAlreadyExistsError } from '@/shared/core/errors/user-already-exists-error'
 import { RegisterUserUseCase } from '@/shared/domains/auth/use-cases/register-user-use-case'
-import { passwordCrypto } from '@/shared/helpers/password'
+import { passwordCrypto } from '@/shared/helpers'
 
 import { userFaker } from '../fakes/user-fake'
 import { InMemoryUserRepository } from '../in-memory/in-memory-user-repository'
@@ -34,7 +34,7 @@ describe('REGISTER AUTH USER USE CASE', () => {
     const user = await userFaker()
     await sut.execute(user)
     await expect(() => sut.execute(user)).rejects.toBeInstanceOf(
-      ResourceAlreadyExistsError,
+      UserAlreadyExistsError,
     )
   })
 

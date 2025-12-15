@@ -5,16 +5,16 @@ import { MailIcon, ShieldCheckIcon, UserIcon, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
-import { ButtonWithLoading } from '@/shared/components/custom/button-with-loading'
-import { InputIcon } from '@/shared/components/custom/input-icon'
-import { ProcessMessageResponse } from '@/shared/components/custom/process-error-response'
 import {
+  ButtonWithLoading,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/shared/components/shadcn/card'
+  InputIcon,
+  ProcessMessageResponse,
+} from '@/shared/components'
 
 import { useRegisterMutation } from '../hooks/mutations/regiter-user-mutation'
 import {
@@ -25,6 +25,7 @@ import {
 const RegisterForm = () => {
   const {
     register,
+    reset,
     formState: { errors },
     handleSubmit,
   } = useForm<RegisterUserSchema>({
@@ -40,9 +41,12 @@ const RegisterForm = () => {
 
   return (
     <ProcessMessageResponse
-      successMessage="Usuário criado com sucesso"
+      titleSuccess="Tudo certo! 🎉"
+      successMessage={registerUser.data?.message}
       error={registerUser.error}
       isSuccess={registerUser.isSuccess}
+      titleError="Erro ao criar usuário"
+      onReset={reset}
     >
       <Card className="border-muted/60 bg-card/90 relative z-10 w-full max-w-120 backdrop-blur">
         <CardHeader className="space-y-1">

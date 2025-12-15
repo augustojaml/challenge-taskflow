@@ -1,7 +1,7 @@
 import { InfoIcon, LucideIcon } from 'lucide-react'
 import { ComponentProps } from 'react'
 
-import { cn } from '@/shared/libs/utils'
+import { cn } from '@/shared/libs'
 
 import { Input } from '../shadcn/input'
 import { Label } from '../shadcn/label'

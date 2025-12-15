@@ -1,4 +1,4 @@
-import { api } from '@/shared/libs/axios'
+import { api } from '@/shared/libs'
 
 import { RegisterUserParamsDto } from '../dtos/register-user-dto'
 

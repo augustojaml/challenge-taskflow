@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/shared/components/shadcn/button'
+import { Button } from '@/shared/components'
 import { useToast } from '@/shared/providers/toast-provider'
 
 const highlights = [

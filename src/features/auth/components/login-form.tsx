@@ -5,15 +5,15 @@ import { LockIcon, MailIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
-import { ButtonWithLoading } from '@/shared/components/custom/button-with-loading'
-import { InputIcon } from '@/shared/components/custom/input-icon'
 import {
+  ButtonWithLoading,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/shared/components/shadcn/card'
+  InputIcon,
+} from '@/shared/components'
 
 import { LoginUserSchema, loginUserSchema } from '../schemas/login-user-schema'
 

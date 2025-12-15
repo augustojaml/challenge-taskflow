@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { BackgroundGlow } from '@/shared/components/custom'
+import { BackgroundGlow } from '@/shared/components'
 
 const TaskLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (

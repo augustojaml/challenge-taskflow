@@ -1,6 +1,6 @@
 import { UnauthorizedError } from '@/shared/core/errors/unauthorized-error'
 import { AuthUserRepositoryPort } from '@/shared/domains/auth/domain/repositories/user-repository-port'
-import { passwordCrypto } from '@/shared/helpers/password'
+import { passwordCrypto } from '@/shared/helpers'
 
 import {
   LoginUserParamsDto,

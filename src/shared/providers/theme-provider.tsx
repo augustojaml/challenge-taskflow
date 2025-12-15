@@ -11,7 +11,7 @@ import {
 } from 'react'
 
 import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
-import { LocalStorage } from '@/shared/helpers/local-storage'
+import { LocalStorage } from '@/shared/helpers'
 
 type Theme = 'light' | 'dark'
 

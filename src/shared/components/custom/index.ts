@@ -1,2 +1,7 @@
+export * from './animated-icons'
 export * from './background-glow'
+export * from './button-with-loading'
+export * from './error-page'
+export * from './input-icon'
+export * from './process-error-response'
 export * from './task-flow-logo'

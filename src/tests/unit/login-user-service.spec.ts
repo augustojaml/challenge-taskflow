@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { UnauthorizedError } from '@/shared/core/errors/unauthorized-error'
 import { LoginUserUseCase } from '@/shared/domains/auth/use-cases/login-user-use-case'
-import { passwordCrypto } from '@/shared/helpers/password'
+import { passwordCrypto } from '@/shared/helpers'
 
 import { userFakeRepo } from '../fakes/user-fake'
 import { InMemoryUserRepository } from '../in-memory/in-memory-user-repository'

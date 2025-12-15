@@ -1,6 +1,8 @@
+'use client'
+
 import { ReactNode, useEffect } from 'react'
 
-import { getResponseErrorCode } from '@/shared/helpers/parse-error-response'
+import { getResponseErrorCode } from '@/shared/helpers'
 import { useToast } from '@/shared/providers/toast-provider'
 
 interface IProcessErrorProps {
@@ -10,6 +12,7 @@ interface IProcessErrorProps {
   titleSuccess?: string
   titleError?: string
   isSuccess?: boolean
+  onReset?: () => void
   children?: ReactNode
 }
 
@@ -20,6 +23,7 @@ export const ProcessMessageResponse = ({
   isSuccess,
   titleSuccess = 'Signing in successfully',
   titleError = 'Signing in error',
+  onReset,
   children,
 }: IProcessErrorProps) => {
   const { showToast } = useToast()
@@ -33,6 +37,7 @@ export const ProcessMessageResponse = ({
         position,
         duration: 5000,
       })
+      onReset?.()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,6 +52,7 @@ export const ProcessMessageResponse = ({
         position,
         duration: 5000,
       })
+      onReset?.()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])

@@ -1,7 +1,7 @@
-import { ResourceAlreadyExistsError } from '@/shared/core/errors/resource-already-exists-error'
+import { UserAlreadyExistsError } from '@/shared/core/errors/user-already-exists-error'
 import { UserEntity } from '@/shared/domains/auth/domain/entities/user.entity'
 import { AuthUserRepositoryPort } from '@/shared/domains/auth/domain/repositories/user-repository-port'
-import { passwordCrypto } from '@/shared/helpers/password'
+import { passwordCrypto } from '@/shared/helpers'
 
 import {
   RegisterUserParamsDto,
@@ -16,7 +16,7 @@ class RegisterUserUseCase {
     const user = await this.userRepository.findByEmail(data.email)
 
     if (user) {
-      throw new ResourceAlreadyExistsError()
+      throw new UserAlreadyExistsError()
     }
 
     const hashedPassword = await passwordCrypto.hash(data.password)

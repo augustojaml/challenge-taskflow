@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { UserEntity } from '@/shared/domains/auth/domain/entities/user.entity'
 import { AuthUserRepositoryPort } from '@/shared/domains/auth/domain/repositories/user-repository-port'
-import { passwordCrypto } from '@/shared/helpers/password'
+import { passwordCrypto } from '@/shared/helpers'
 
 type UserFakeParams = {
   password?: string
