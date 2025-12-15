@@ -4,7 +4,7 @@ import { OptionalType } from '@/shared/core/types/optional'
 type UserEntityProps = {
   name: string
   email: string
-  passwordHash: string | null
+  passwordHash: string
   avatarUrl: string | null
   createdAt: Date
   updatedAt: Date
@@ -18,14 +18,14 @@ class UserEntity extends Entity<UserEntityProps> {
   static create(
     props: OptionalType<
       UserEntityProps,
-      'passwordHash' | 'avatarUrl' | 'createdAt' | 'updatedAt'
+      'avatarUrl' | 'createdAt' | 'updatedAt'
     >,
     id?: string,
   ) {
     return new UserEntity(
       {
         ...props,
-        passwordHash: props.passwordHash ?? null,
+        passwordHash: props.passwordHash,
         avatarUrl: props.avatarUrl ?? null,
         createdAt: props.createdAt ?? new Date(),
         updatedAt: props.updatedAt ?? new Date(),
@@ -46,7 +46,7 @@ class UserEntity extends Entity<UserEntityProps> {
     return this.props.passwordHash ?? null
   }
 
-  set passwordHash(passwordHash: string | null) {
+  set passwordHash(passwordHash: string) {
     this.props.passwordHash = passwordHash
   }
 

@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { LoginUserService } from '@/features/auth/services/login-user-service'
 import { UnauthorizedError } from '@/shared/core/errors/unauthorized-error'
+import { LoginUserUseCase } from '@/shared/domains/auth/use-cases/login-user-use-case'
 import { passwordCrypto } from '@/shared/helpers/password'
 
 import { userFakeRepo } from '../fakes/user-fake'
 import { InMemoryUserRepository } from '../in-memory/in-memory-user-repository'
 
 let useRepo: InMemoryUserRepository
-let sut: LoginUserService
+let sut: LoginUserUseCase
 
 describe('LOGIN AUTH USER USE CASE', () => {
   beforeEach(() => {
     useRepo = new InMemoryUserRepository()
-    sut = new LoginUserService(useRepo)
+    sut = new LoginUserUseCase(useRepo)
   })
 
   it('Should be able to login auth user', async () => {

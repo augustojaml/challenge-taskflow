@@ -1,19 +1,19 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { RegisterUserService } from '@/features/auth/services/register-user-service'
 import { ResourceAlreadyExistsError } from '@/shared/core/errors/resource-already-exists-error'
+import { RegisterUserUseCase } from '@/shared/domains/auth/use-cases/register-user-use-case'
 import { passwordCrypto } from '@/shared/helpers/password'
 
 import { userFaker } from '../fakes/user-fake'
 import { InMemoryUserRepository } from '../in-memory/in-memory-user-repository'
 
 let useRepo: InMemoryUserRepository
-let sut: RegisterUserService
+let sut: RegisterUserUseCase
 
 describe('REGISTER AUTH USER USE CASE', () => {
   beforeEach(() => {
     useRepo = new InMemoryUserRepository()
-    sut = new RegisterUserService(useRepo)
+    sut = new RegisterUserUseCase(useRepo)
   })
 
   it('Should be able to register auth user', async () => {

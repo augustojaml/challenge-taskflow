@@ -1,4 +1,4 @@
-import { prisma } from '@/shared/libs/prisma'
+import { prisma } from '@/shared/databases/prisma'
 
 const DashboardPage = async () => {
   const user = await prisma.user.findMany()
