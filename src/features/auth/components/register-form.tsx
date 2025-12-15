@@ -1,10 +1,12 @@
 'use client'
 
-import { Label } from '@radix-ui/react-label'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { MailIcon, ShieldCheckIcon, UserIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useForm } from 'react-hook-form'
 
-import { Button } from '@/shared/components/shadcn/button'
+import { ButtonWithLoading } from '@/shared/components/custom/button-with-loading'
+import { InputIcon } from '@/shared/components/custom/input-icon'
 import {
   Card,
   CardContent,
@@ -12,9 +14,27 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/components/shadcn/card'
-import { Input } from '@/shared/components/shadcn/input'
+
+import {
+  RegisterUserSchema,
+  registerUserSchema,
+} from '../schemas/register-user-schema'
 
 const RegisterForm = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<RegisterUserSchema>({
+    resolver: zodResolver(registerUserSchema),
+    mode: 'all',
+  })
+
+  const onSubmit = handleSubmit((data: RegisterUserSchema) => {
+    // handle login
+    console.log(data)
+  })
+
   return (
     <Card className="border-muted/60 bg-card/90 relative z-10 w-full max-w-120 backdrop-blur">
       <CardHeader className="space-y-1">
@@ -25,78 +45,44 @@ const RegisterForm = () => {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        <form
-          className="space-y-5"
-          onSubmit={(e) => {
-            e.preventDefault()
-            // handle submit
-          }}
-        >
-          {/* Nome de usuário */}
-          <div className="space-y-2">
-            <Label htmlFor="name">Usuário</Label>
-            <div className="relative">
-              <span className="pointer-events-none absolute inset-y-0 left-3 inline-flex items-center">
-                <UserIcon className="text-muted-foreground h-4 w-4" />
-              </span>
-              <Input
-                id="name"
-                placeholder="seu usuário"
-                className="pl-9"
-                autoComplete="username"
-              />
-            </div>
-          </div>
+        <form className="space-y-5" onSubmit={onSubmit}>
+          <InputIcon
+            id="name"
+            label="Usuário"
+            icon={UserIcon}
+            {...register('name')}
+            error={errors.name?.message}
+          />
 
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <div className="relative">
-              <span className="pointer-events-none absolute inset-y-0 left-3 inline-flex items-center">
-                <MailIcon className="text-muted-foreground h-4 w-4" />
-              </span>
-              <Input
-                id="email"
-                type="email"
-                placeholder="seu@email.com"
-                className="pl-9"
-                autoComplete="email"
-              />
-            </div>
-          </div>
+          <InputIcon
+            id="email"
+            label="Email"
+            icon={MailIcon}
+            {...register('email')}
+            error={errors.email?.message}
+          />
 
-          {/* Senha */}
-          <div className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
-            <div className="relative">
-              <span className="pointer-events-none absolute inset-y-0 left-3 inline-flex items-center">
-                <ShieldCheckIcon className="text-muted-foreground h-4 w-4" />
-              </span>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                className="pl-9"
-                autoComplete="new-password"
-              />
-            </div>
-          </div>
+          <InputIcon
+            id="password"
+            label="Senha"
+            icon={ShieldCheckIcon}
+            type="password"
+            error={errors.password?.message}
+            {...register('password')}
+          />
 
-          {/* submit */}
-          <Button type="submit" className="w-full">
+          <ButtonWithLoading type="submit" className="mt-8 w-full">
             Criar conta
-          </Button>
-
-          {/* Login */}
-          <div className="flex justify-center">
-            <Link
-              href="/auth/login"
-              className="text-primary text-sm font-medium hover:underline"
-            >
-              Já tenho uma conta
-            </Link>
-          </div>
+          </ButtonWithLoading>
         </form>
+        <ButtonWithLoading variant="link" className="w-full justify-center">
+          <Link
+            href="/auth/login"
+            className="text-primary text-sm font-medium hover:underline"
+          >
+            Já tenho uma conta
+          </Link>
+        </ButtonWithLoading>
       </CardContent>
     </Card>
   )
