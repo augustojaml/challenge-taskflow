@@ -9,7 +9,7 @@ import {
   toRegisterUserResponseDto,
 } from '../dtos/register-user.dto'
 
-class RegisterService {
+class RegisterUserService {
   constructor(private userRepository: AuthUserRepositoryPort) {}
 
   async execute(data: RegisterUserParamsDto): Promise<RegisterUserResponseDto> {
@@ -32,4 +32,4 @@ class RegisterService {
   }
 }
 
-export { RegisterService }
+export { RegisterUserService }

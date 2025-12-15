@@ -8,7 +8,7 @@ import {
   toLoginUserResponseDto,
 } from '../dtos/login-user.dto'
 
-class LoginService {
+class LoginUserService {
   constructor(private readonly _userRepository: AuthUserRepositoryPort) {}
 
   async execute(data: LoginUserParamsDto): Promise<LoginUserResponseDto> {
@@ -30,4 +30,4 @@ class LoginService {
     return toLoginUserResponseDto(user)
   }
 }
-export { LoginService }
+export { LoginUserService }
