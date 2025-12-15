@@ -4,9 +4,7 @@ import { BackgroundGlow } from '@/shared/components/custom'
 import { AnimatedIcons } from '@/shared/components/custom/animated-icons'
 import { TaskFlowLogo } from '@/shared/components/custom/task-flow-logo'
 
-export default function AuthLayout({
-  children,
-}: Readonly<{ children: ReactNode }>) {
+const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
     <div className="bg-background text-foreground min-h-screen">
       {/* page container */}
@@ -49,3 +47,5 @@ export default function AuthLayout({
     </div>
   )
 }
+
+export default AuthLayout
