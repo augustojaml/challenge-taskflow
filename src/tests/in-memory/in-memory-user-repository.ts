@@ -1,5 +1,5 @@
-import { UserEntity } from '@/shared/core/auth/domain/entities/user.entity'
-import { AuthUserRepositoryPort } from '@/shared/core/auth/domain/repositories/user-repository-port'
+import { UserEntity } from '@/shared/domains/auth/domain/entities/user.entity'
+import { AuthUserRepositoryPort } from '@/shared/domains/auth/domain/repositories/user-repository-port'
 
 class InMemoryUserRepository implements AuthUserRepositoryPort {
   public users: UserEntity[] = []
