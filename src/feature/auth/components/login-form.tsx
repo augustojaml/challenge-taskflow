@@ -2,6 +2,7 @@
 
 import { Label } from '@radix-ui/react-label'
 import { ShieldCheckIcon, UserIcon } from 'lucide-react'
+import Link from 'next/link'
 
 import { Button } from '@/shared/components/shadcn/button'
 import {
@@ -71,12 +72,12 @@ const LoginForm = () => {
 
           {/* Register */}
           <div className="flex justify-center">
-            <a
-              href="#"
+            <Link
+              href="/auth/register"
               className="text-primary text-sm font-medium hover:underline"
             >
               Criar conta
-            </a>
+            </Link>
           </div>
         </form>
       </CardContent>
