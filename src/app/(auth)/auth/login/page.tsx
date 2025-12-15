@@ -1,5 +1,7 @@
+import { LoginScreen } from '@/feature/auth/screens/login'
+
 const LoginPage = () => {
-  return <div>login page</div>
+  return <LoginScreen />
 }
 
 export default LoginPage

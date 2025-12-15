@@ -1,5 +1,7 @@
+import { RegisterScreen } from '@/feature/auth/screens/register'
+
 const RegisterPage = () => {
-  return <div>Register page</div>
+  return <RegisterScreen />
 }
 
 export default RegisterPage

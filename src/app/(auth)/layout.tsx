@@ -29,7 +29,8 @@ export default function AuthLayout({
             {/* short description */}
             <p className="text-muted-foreground mt-4 text-base">
               Planeje, acompanhe e conclua tarefas com mais produtividade.
-              Centralize prazos, prioridades e colaboração em um único lugar.
+              Transforme atividades em fluxos simples e eficientes no seu dia a
+              dia.
             </p>
 
             {/* animated icons */}
@@ -38,7 +39,10 @@ export default function AuthLayout({
         </div>
 
         {/* RIGHT: auth content */}
-        <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full flex-col items-center justify-center px-8 md:px-4">
+          <div className="flex flex-col items-center justify-center py-8 md:hidden">
+            <TaskFlowLogo />
+          </div>
           {children}
         </div>
       </div>
