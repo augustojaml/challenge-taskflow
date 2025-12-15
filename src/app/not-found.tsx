@@ -1,11 +1,13 @@
-import { DefaultError } from '@/shared/components/custom/error-page'
+import { ErrorPage } from '@/shared/components/custom/error-page'
 
 export default function NotFound() {
   return (
-    <DefaultError
+    <ErrorPage
       errorCode={404}
-      title="Página nao encontrada"
+      title="Página não encontrada"
       message="A página que você está procurando não existe ou foi movida."
+      homeHref="/"
+      showRetry={false}
     />
   )
 }
