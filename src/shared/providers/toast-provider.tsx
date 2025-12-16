@@ -137,7 +137,7 @@ export const CustomToastProvider: FC<{ children: ReactNode }> = ({
                 if (!open) removeToast(toast.id)
               }}
               className={clsx(
-                'fixed z-[60] w-full max-w-sm rounded-xl',
+                'fixed z-60 w-full max-w-sm rounded-xl',
                 positionClass,
                 'data-[state=open]:animate-in data-[state=open]:fade-in-50 data-[state=open]:slide-in-from-right-5',
                 'data-[state=closed]:animate-out data-[state=closed]:fade-out-50 data-[state=closed]:slide-out-to-right-5',
@@ -154,13 +154,13 @@ export const CustomToastProvider: FC<{ children: ReactNode }> = ({
                 <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
                   <div
                     className={clsx(
-                      'absolute -top-24 -left-24 h-72 w-[140%] rounded-full bg-gradient-to-br blur-3xl',
+                      'absolute -top-24 -left-24 h-72 w-[140%] rounded-full bg-linear-to-br blur-3xl',
                       v.blobs,
                     )}
                   />
                   <div
                     className={clsx(
-                      'absolute -right-32 -bottom-32 h-80 w-[120%] rounded-full bg-gradient-to-tr blur-3xl',
+                      'absolute -right-32 -bottom-32 h-80 w-[120%] rounded-full bg-linear-to-tr blur-3xl',
                       v.blobs,
                     )}
                   />

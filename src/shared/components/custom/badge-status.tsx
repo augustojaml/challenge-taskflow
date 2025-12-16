@@ -18,15 +18,15 @@ export function BadgeStatus({
     () => ({
       COMPLETED: {
         bg: 'bg-green-700/10 text-green-500 border-green-500',
-        title: 'Open',
+        title: 'Concluída',
       },
       IN_PROGRESS: {
         bg: 'bg-orange-700/10 text-red-500 border-red-500',
-        title: 'Closed',
+        title: 'Em andamento',
       },
       PENDING: {
         bg: 'bg-yellow-700/10 text-yellow-500 border-yellow-500',
-        title: 'Pending',
+        title: 'Pendente',
       },
     }),
     [],
@@ -35,7 +35,11 @@ export function BadgeStatus({
   return (
     <Badge
       variant="secondary"
-      className={cn('flex items-center gap-1', className, variant[status].bg)}
+      className={cn(
+        'flex items-center gap-1 uppercase',
+        className,
+        variant[status].bg,
+      )}
       {...rest}
     >
       {variant[status].title}
