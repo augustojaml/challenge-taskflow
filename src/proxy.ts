@@ -5,8 +5,33 @@ import { type JWTPayload, tokenJWT } from '@/shared/helpers'
 const publicRoutes = ['/auth/login', '/auth/register', '/docs', '/api']
 const authRoutes = ['/auth/login', '/auth/register']
 
-export async function middleware(request: NextRequest) {
+const staticFileExtensions = [
+  '.svg',
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.webp',
+  '.ico',
+  '.css',
+  '.js',
+  '.woff',
+  '.woff2',
+  '.ttf',
+  '.eot',
+]
+
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // Permitir que arquivos estáticos passem sem processamento
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/favicon.ico') ||
+    staticFileExtensions.some((ext) => pathname.endsWith(ext))
+  ) {
+    return NextResponse.next()
+  }
 
   // Verificar se é uma rota pública (API, docs, etc)
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
@@ -51,7 +76,7 @@ export async function middleware(request: NextRequest) {
           headers: requestHeaders,
         },
       })
-    } catch (error) {
+    } catch {
       // Token inválido, limpar cookie e redirecionar para login
       if (!isAuthRoute) {
         const url = request.nextUrl.clone()
@@ -82,6 +107,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    String.raw`/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)`,
   ],
 }
