@@ -44,8 +44,18 @@ class TaskEntity extends Entity<TaskEntityProps> {
     return this.props.title
   }
 
+  set title(title: string) {
+    this.props.title = title
+    this.props.updatedAt = new Date()
+  }
+
   get description() {
     return this.props.description
+  }
+
+  set description(description: string | null) {
+    this.props.description = description
+    this.props.updatedAt = new Date()
   }
 
   get status() {
@@ -54,6 +64,7 @@ class TaskEntity extends Entity<TaskEntityProps> {
 
   set status(status: TaskStatus) {
     this.props.status = status
+    this.props.updatedAt = new Date()
   }
 
   get createdAt() {

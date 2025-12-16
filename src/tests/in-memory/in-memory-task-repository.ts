@@ -18,6 +18,22 @@ class InMemoryTaskRepository implements TaskRepositoryPort {
     const tasks = this.tasks.filter((t) => t.userId === userId)
     return Promise.resolve(tasks)
   }
+
+  update(task: TaskEntity): Promise<TaskEntity> {
+    const index = this.tasks.findIndex((t) => t.id === task.id)
+    if (index !== -1) {
+      this.tasks[index] = task
+    }
+    return Promise.resolve(task)
+  }
+
+  delete(id: string): Promise<void> {
+    const index = this.tasks.findIndex((t) => t.id === id)
+    if (index !== -1) {
+      this.tasks.splice(index, 1)
+    }
+    return Promise.resolve()
+  }
 }
 
 export { InMemoryTaskRepository }
