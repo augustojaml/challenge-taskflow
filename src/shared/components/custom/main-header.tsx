@@ -1,13 +1,11 @@
 'use client'
 
 import { Bell, LogOutIcon } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 
-import { useLogoutMutation } from '@/features/auth/hooks/mutations/logout-user-mutation'
-import { useGetMe } from '@/features/auth/hooks/queries/use-get-me'
 import { getInitialsLetterName } from '@/shared/helpers'
 import { cn } from '@/shared/libs'
+import { useAuth } from '@/shared/providers/auth-provider'
 
 import { Avatar, AvatarFallback, AvatarImage } from '../shadcn/avatar'
 import { Button } from '../shadcn/button'
@@ -31,20 +29,13 @@ const UserMenuSkeleton = () => {
 }
 
 const MainHeader = () => {
-  const { data: user, isLoading, isError } = useGetMe()
-  const logoutMutation = useLogoutMutation()
-  const router = useRouter()
+  const { user, isLoading, logout } = useAuth()
 
-  const handleSignOut = useCallback(async () => {
-    await logoutMutation.mutateAsync()
-    router.push('/auth/login')
-  }, [logoutMutation, router])
-
-  useEffect(() => {
-    if (isError) {
-      handleSignOut()
-    }
-  }, [handleSignOut, isError])
+  const handleSignOut = useCallback(() => {
+    logout().catch(() => {
+      // Erro já é tratado no auth-provider
+    })
+  }, [logout])
 
   return (
     <header className="bg-card/80 border-border/60 sticky top-0 z-40 w-full border-b backdrop-blur">

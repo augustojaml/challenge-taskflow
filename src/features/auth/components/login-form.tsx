@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LockIcon, LogInIcon, MailIcon } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -22,7 +21,6 @@ import { useLoginMutation } from '../hooks/mutations/login-user-mutation'
 import { LoginUserSchema, loginUserSchema } from '../schemas/login-user-schema'
 
 const LoginForm = () => {
-  const router = useRouter()
   const { login } = useAuth()
   const {
     register,
@@ -38,7 +36,8 @@ const LoginForm = () => {
   const onSubmit = handleSubmit(async (data: LoginUserSchema) => {
     const result = await loginUser.mutateAsync(data)
     login(result.token, result.user)
-    router.push('/')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(globalThis as any).location.assign('/')
   })
 
   return (

@@ -53,6 +53,7 @@ export default defineConfig([
         },
       ],
       '@typescript-eslint/no-shadow': 'error',
+      '@typescript-eslint/no-empty-object-type': 'off',
 
       // organização de imports
       'simple-import-sort/imports': 'error',

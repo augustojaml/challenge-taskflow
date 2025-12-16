@@ -39,15 +39,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const response = NextResponse.json({
+  return NextResponse.json({
     message: 'Logout realizado com sucesso',
   })
-
-  response.cookies.set('auth_token', '', {
-    httpOnly: true,
-    path: '/',
-    maxAge: 0,
-  })
-
-  return response
 }
