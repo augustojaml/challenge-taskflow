@@ -1,11 +1,7 @@
-import { prisma } from '@/shared/databases/prisma'
+import { TaskScreen } from '@/features/task/screens/task'
 
 const DashboardPage = async () => {
-  const user = await prisma.user.findMany()
-
-  console.log(user)
-
-  return <div>Dashboard</div>
+  return <TaskScreen />
 }
 
 export default DashboardPage

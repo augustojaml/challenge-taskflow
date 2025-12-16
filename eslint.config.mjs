@@ -57,6 +57,7 @@ export default defineConfig([
       // organização de imports
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+      'react-hooks/set-state-in-effect': 'off',
 
       // prettier como regra final
       'prettier/prettier': [

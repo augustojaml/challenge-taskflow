@@ -9,7 +9,9 @@ const TaskFlowLogo = () => {
         <span className="text-lg font-semibold tracking-tight">
           Task<span className="text-primary">Flow</span>
         </span>
-        <span className="text-muted-foreground text-xs">task management</span>
+        <span className="text-muted-foreground relative -top-1 text-xs">
+          Gerenciamento de Tarefas
+        </span>
       </div>
     </div>
   )

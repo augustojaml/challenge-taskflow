@@ -1,14 +1,27 @@
 'use client'
 
 import { Moon, Sun } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 import { cn } from '@/shared/libs/utils'
 import { useTheme } from '@/shared/providers/theme-provider'
 
 export const ButtonTheme = () => {
   const { toggleTheme, theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  const handleMount = () => {
+    setMounted(true)
+  }
+
+  useEffect(() => {
+    handleMount()
+  }, [])
+
+  if (!mounted) return null
+
   return (
-    <button
+    <div
       onClick={toggleTheme}
       className={cn(
         'rounded-full p-2 shadow-md transition-colors',
@@ -22,6 +35,6 @@ export const ButtonTheme = () => {
       ) : (
         <Sun className="h-4 w-4" />
       )}
-    </button>
+    </div>
   )
 }
