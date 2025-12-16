@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { type JWTPayload, tokenJWT } from '@/shared/helpers'
 
-const publicRoutes = ['/auth/login', '/auth/register', '/docs', '/api']
+const publicRoutes = ['/auth/login', '/auth/register', '/docs']
 const authRoutes = ['/auth/login', '/auth/register']
+const publicApiRoutes = [
+  '/api/auth/login',
+  '/api/auth/register',
+  '/api/swagger',
+]
 
 const staticFileExtensions = [
   '.svg',
@@ -33,12 +38,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Verificar se é uma rota pública (API, docs, etc)
+  // Verificar se é uma rota pública (docs, etc)
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route))
+  const isPublicApiRoute = publicApiRoutes.some((route) =>
+    pathname.startsWith(route),
+  )
+  const isApiRoute = pathname.startsWith('/api')
 
-  // Se for rota pública (API ou docs), permitir acesso
-  if (isPublicRoute && !isAuthRoute) {
+  // Se for rota pública (docs, etc) ou rota de API pública, permitir acesso
+  if ((isPublicRoute && !isAuthRoute) || isPublicApiRoute) {
     return NextResponse.next()
   }
 
@@ -46,6 +55,11 @@ export async function proxy(request: NextRequest) {
   const token =
     request.cookies.get('auth_token')?.value ||
     request.headers.get('authorization')?.replace('Bearer ', '')
+
+  // Se for rota de API protegida e não tiver token, retornar 401
+  if (!token && isApiRoute && !isPublicApiRoute) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   // Se não houver token e não for rota de auth, redirecionar para login
   if (!token && !isAuthRoute) {
