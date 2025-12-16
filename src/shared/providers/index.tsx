@@ -9,9 +9,9 @@ import { CustomToastProvider } from './toast-provider'
 
 const PROVIDERS = [
   { component: ThemeProvider, key: 'themeProvider' },
+  { component: AuthProvider, key: 'authProvider' },
   { component: CustomToastProvider, key: 'toastProvider' },
   { component: QueryClientProvider, key: 'queryClientProvider' },
-  { component: AuthProvider, key: 'authProvider' },
 ]
 
 export const MainProviders = ({ children }: { children: ReactNode }) => {

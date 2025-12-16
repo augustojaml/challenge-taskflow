@@ -2,6 +2,7 @@
 
 import { Bell, LogOutIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useCallback, useEffect } from 'react'
 
 import { useLogoutMutation } from '@/features/auth/hooks/mutations/logout-user-mutation'
 import { useGetMe } from '@/features/auth/hooks/queries/use-get-me'
@@ -30,14 +31,20 @@ const UserMenuSkeleton = () => {
 }
 
 const MainHeader = () => {
-  const { data: user, isLoading } = useGetMe()
+  const { data: user, isLoading, isError } = useGetMe()
   const logoutMutation = useLogoutMutation()
   const router = useRouter()
 
-  const handleSignOut = async () => {
+  const handleSignOut = useCallback(async () => {
     await logoutMutation.mutateAsync()
     router.push('/auth/login')
-  }
+  }, [logoutMutation, router])
+
+  useEffect(() => {
+    if (isError) {
+      handleSignOut()
+    }
+  }, [handleSignOut, isError])
 
   return (
     <header className="bg-card/80 border-border/60 sticky top-0 z-40 w-full border-b backdrop-blur">

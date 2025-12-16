@@ -1,9 +1,12 @@
+import { TaskStatus } from '@/shared/core/types/task-status'
+
 import { TaskEntity } from '../domain/entities/task.entity'
 
 type CreateTaskParamsDto = {
   userId: string
   title: string
   description?: string | null
+  status?: TaskStatus
 }
 
 const toCreateTaskResponseDto = (task: TaskEntity) => {

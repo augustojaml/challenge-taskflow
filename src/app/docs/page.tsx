@@ -20,5 +20,9 @@ export default function SwaggerPage() {
     return <LoadingPage />
   }
 
-  return <SwaggerUI spec={spec} />
+  return (
+    <div className="h-full w-full bg-white">
+      <SwaggerUI spec={spec} />
+    </div>
+  )
 }

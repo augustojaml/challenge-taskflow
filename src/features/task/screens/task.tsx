@@ -6,36 +6,33 @@ import { CreateTaskModal } from '@/features/task/components/create-task-modal'
 
 import { DeleteTaskModal } from '../components/delete-task-modal'
 import { TableData } from '../components/table-data'
-import { TableEmpty } from '../components/table-empty'
-import { TablePagination } from '../components/table-pagination'
 import { TaskHeader } from '../components/task-header'
+import { useGetTasks } from '../hooks/queries/use-find-tasks'
 
 const TaskScreen = () => {
-  const hasData = true
   const [openModalCreate, setOpenModalCreate] = useState(false)
   const [openModalDelete, setOpenModalDelete] = useState(false)
 
+  const { data: tasks, isLoading: isTasksLoading } = useGetTasks()
+
   return (
     <div className="w-full py-6">
-      <TaskHeader hasData={hasData} />
-      {hasData && (
-        <div>
-          <TableData
-            onDelete={() => setOpenModalDelete(true)}
-            onNavigate={() => setOpenModalCreate(true)}
-          />
-          <TablePagination />
-        </div>
-      )}
-      {!hasData && <TableEmpty onCreate={() => setOpenModalCreate(true)} />}
+      <TaskHeader
+        hasData={!!tasks && tasks.length > 0}
+        onOpen={() => setOpenModalCreate(true)}
+      />
+
+      <TableData
+        onDelete={() => setOpenModalDelete(true)}
+        onNavigate={() => setOpenModalCreate(true)}
+        isLoading={isTasksLoading}
+        data={tasks || []}
+        onOpenCreate={() => setOpenModalCreate(true)}
+      />
 
       <CreateTaskModal
         open={openModalCreate}
         onClose={() => setOpenModalCreate(false)}
-        onSubmit={async (data) => {
-          console.log(data)
-          // chamar mutation aqui
-        }}
       />
 
       <DeleteTaskModal

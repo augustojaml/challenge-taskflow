@@ -25,24 +25,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../shared/components/shadcn/select'
+import { useCreateMutation } from '../hooks/mutations/create-task-mutation'
 
 type CreateTaskModalProps = {
   open: boolean
   onClose: () => void
-  onSubmit: (data: CreateTaskSchema) => Promise<void> | void
 }
 
-export function CreateTaskModal({
-  open,
-  onClose,
-  onSubmit,
-}: CreateTaskModalProps) {
+export function CreateTaskModal({ open, onClose }: CreateTaskModalProps) {
   const {
     control,
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreateTaskSchema>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
@@ -50,8 +46,10 @@ export function CreateTaskModal({
     },
   })
 
+  const createTask = useCreateMutation()
+
   const handleSubmitForm = async (data: CreateTaskSchema) => {
-    await onSubmit(data)
+    await createTask.mutateAsync(data)
     reset()
     onClose()
   }
@@ -69,7 +67,7 @@ export function CreateTaskModal({
             label="Título"
             placeholder="Digite o título da tarefa"
             {...register('title')}
-            disabled={isSubmitting}
+            disabled={createTask.isPending}
             error={errors.title?.message}
           />
 
@@ -78,7 +76,7 @@ export function CreateTaskModal({
             label="Descrição"
             placeholder="Digite a descrição da tarefa"
             {...register('description')}
-            disabled={isSubmitting}
+            disabled={createTask.isPending}
             error={errors.description?.message}
           />
 
@@ -91,7 +89,7 @@ export function CreateTaskModal({
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
-                  disabled={isSubmitting}
+                  disabled={createTask.isPending}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o status" />
@@ -112,12 +110,12 @@ export function CreateTaskModal({
               type="button"
               variant="outline"
               onClick={onClose}
-              disabled={isSubmitting}
+              disabled={createTask.isPending}
             >
               Cancelar
             </Button>
 
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={createTask.isPending}>
               Criar tarefa
             </Button>
           </div>

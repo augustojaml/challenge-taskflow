@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+import { createTaskSchema } from '@/features/task/skemas/create-task-schema'
 import { taskFactory } from '@/shared/databases/prisma/factories/task-factory'
 
 /**
@@ -96,7 +97,16 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
 
-    const { title, description } = body
+    const validationSchema = createTaskSchema.safeParse(body)
+
+    if (!validationSchema.success) {
+      return NextResponse.json(
+        { errors: validationSchema.error.format(), data: null },
+        { status: 400 },
+      )
+    }
+
+    const { title, description, status } = validationSchema.data
 
     if (!title) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
@@ -108,6 +118,7 @@ export async function POST(request: NextRequest) {
       userId,
       title,
       description,
+      status,
     })
 
     return NextResponse.json(result)

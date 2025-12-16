@@ -36,7 +36,7 @@ const TablePagination = ({
   const canNext = page < pageCount
 
   return (
-    <div className="bg-card mt-2 flex flex-col gap-3 rounded-xl border-t px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mt-2 flex flex-col gap-3 rounded-xl border px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
       {/* Info */}
       <span className="text-muted-foreground text-xs">
         mostrando{' '}

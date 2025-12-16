@@ -15,7 +15,7 @@ type TableSkeletonProps = {
 export const TasksTableSkeleton = ({ rows = 5 }: TableSkeletonProps) => {
   return (
     <Table className="w-full">
-      <TableHeader className="bg-muted/60">
+      <TableHeader>
         <TableRow className="[&_th]:py-3">
           <TableHead className="min-w-55">Título</TableHead>
           <TableHead className="min-w-70">Descrição</TableHead>

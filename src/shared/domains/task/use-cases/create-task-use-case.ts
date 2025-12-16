@@ -21,11 +21,13 @@ class CreateTaskUseCase {
     if (!user) {
       throw new UnauthorizedError()
     }
+    console.log(data)
 
     const taskEntity = TaskEntity.create({
       userId: data.userId,
       title: data.title,
       description: data.description ?? null,
+      status: data.status ?? 'PENDING',
     })
 
     const createdTask = await this.taskRepository.create(taskEntity)

@@ -2,15 +2,15 @@ import { useQuery } from '@tanstack/react-query'
 
 import { QUERY_KEYS } from '@/shared/constants/query-keys'
 
-import { authService } from '../../services/auth-service'
+import { TaskService } from '../../services/task-service'
 
-export const useGetMe = () => {
+export const useGetTasks = () => {
   const query = useQuery({
-    queryKey: [QUERY_KEYS.ME],
+    queryKey: [QUERY_KEYS.FIND_TASKS],
     queryFn: async () => {
-      const result = await authService.getMe()
+      const result = await TaskService.findAll()
 
-      return result.user
+      return result.tasks
     },
     retry: false,
   })
