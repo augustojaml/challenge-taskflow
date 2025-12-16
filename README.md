@@ -461,3 +461,15 @@ Durante o desenvolvimento, esperamos que você demonstre:
 **Boa sorte! Estamos ansiosos para ver sua solução! 🚀**
 
 *Desenvolvido pela equipe Hubfy.ai*
+
+
+---
+
+# Minhas Pendências
+
+- [ ] Test de components
+- [ ] Test de E2E
+- [ ] Implementar paginação na listagem de tarefas
+- [ ] Implementar filtro por status na listagem de tarefas
+- [ ] Implementar filtro pelo titulo na listagem de tarefas
+- [ ] Refatoração e limpeza de código
