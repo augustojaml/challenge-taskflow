@@ -1,7 +1,5 @@
+export * from './get-initials-letter-name'
 export * from './local-storage'
 export * from './parse-error-response'
 export * from './password'
 export * from './token'
-
-
-
