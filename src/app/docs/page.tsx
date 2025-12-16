@@ -5,6 +5,8 @@ import 'swagger-ui-react/swagger-ui.css'
 import { useEffect, useState } from 'react'
 import SwaggerUI from 'swagger-ui-react'
 
+import { LoadingPage } from '@/shared/components/custom/loading-page'
+
 export default function SwaggerPage() {
   const [spec, setSpec] = useState(null)
 
@@ -15,7 +17,7 @@ export default function SwaggerPage() {
   }, [])
 
   if (!spec) {
-    return <div>Carregando documentação...</div>
+    return <LoadingPage />
   }
 
   return <SwaggerUI spec={spec} />

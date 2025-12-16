@@ -13,6 +13,3 @@ const useLoginMutation = () => {
 }
 
 export { useLoginMutation }
-
-
-

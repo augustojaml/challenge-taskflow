@@ -1,7 +1,9 @@
 'use client'
 
 import { Bell, LogOutIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
+import { useLogoutMutation } from '@/features/auth/hooks/mutations/logout-user-mutation'
 import { useGetMe } from '@/features/auth/hooks/queries/use-get-me'
 import { getInitialsLetterName } from '@/shared/helpers'
 import { cn } from '@/shared/libs'
@@ -29,10 +31,12 @@ const UserMenuSkeleton = () => {
 
 const MainHeader = () => {
   const { data: user, isLoading } = useGetMe()
+  const logoutMutation = useLogoutMutation()
+  const router = useRouter()
 
-  const handleSignOut = () => {
-    // TODO: integrar logout real (cookie / token / next-auth)
-    console.log('Sign out clicked')
+  const handleSignOut = async () => {
+    await logoutMutation.mutateAsync()
+    router.push('/auth/login')
   }
 
   return (
