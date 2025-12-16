@@ -2,7 +2,7 @@
 
 import { Eye, Trash2 } from 'lucide-react'
 
-import { Badge } from '@/shared/components/shadcn/badge'
+import { BadgeStatus } from '@/shared/components/custom/badge-status'
 import { Button } from '@/shared/components/shadcn/button'
 import {
   Table,
@@ -18,20 +18,6 @@ import { formatTimeBR } from '@/shared/helpers/format'
 import { TableEmpty } from './table-empty'
 import { TablePagination } from './table-pagination'
 import { TasksTableSkeleton } from './table-skeleton'
-
-type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED'
-
-const statusLabel: Record<TaskStatus, string> = {
-  PENDING: 'Pendente',
-  IN_PROGRESS: 'Em andamento',
-  COMPLETED: 'Concluída',
-}
-
-const statusVariant: Record<TaskStatus, 'default' | 'secondary' | 'outline'> = {
-  PENDING: 'outline',
-  IN_PROGRESS: 'secondary',
-  COMPLETED: 'default',
-}
 
 interface TableDataProps {
   onDelete?: (task: Task) => void
@@ -91,9 +77,7 @@ const TableData = ({
                       </TableCell>
 
                       <TableCell>
-                        <Badge variant={statusVariant[task.status]}>
-                          {statusLabel[task.status]}
-                        </Badge>
+                        <BadgeStatus status={task.status} />
                       </TableCell>
 
                       <TableCell>
