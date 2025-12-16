@@ -34,8 +34,8 @@ const statusVariant: Record<TaskStatus, 'default' | 'secondary' | 'outline'> = {
 }
 
 interface TableDataProps {
-  onDelete?: (taskId: string) => void
-  onNavigate?: (taskId: string) => void
+  onDelete?: (task: Task) => void
+  onSelect?: (task: Task) => void
   onOpenCreate?: () => void
   isLoading?: boolean
   data?: Task[]
@@ -43,21 +43,18 @@ interface TableDataProps {
 
 const TableData = ({
   onDelete,
-  onNavigate,
+  onSelect,
   onOpenCreate,
   isLoading,
   data,
 }: TableDataProps) => {
-  const handleDelete = (taskId: string) => {
-    console.log('Deletar task:', taskId)
-    onDelete?.(taskId)
+  const handleDelete = (task: Task) => {
+    onDelete?.(task)
   }
 
-  const handleNavigate = (taskId: string) => {
-    onNavigate?.(taskId)
+  const handleSelect = (task: Task) => {
+    onSelect?.(task)
   }
-
-  console.log('Table Data:', { data })
 
   return (
     <>
@@ -114,7 +111,7 @@ const TableData = ({
                           <Button
                             size="icon"
                             variant="ghost"
-                            onClick={() => handleNavigate(task.id)}
+                            onClick={() => handleSelect(task)}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -123,7 +120,7 @@ const TableData = ({
                             size="icon"
                             variant="ghost"
                             className="text-destructive hover:text-destructive"
-                            onClick={() => handleDelete(task.id)}
+                            onClick={() => handleDelete(task)}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

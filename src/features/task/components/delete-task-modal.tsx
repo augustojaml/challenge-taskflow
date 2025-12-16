@@ -11,14 +11,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/shadcn/dialog'
+import { Task } from '@/shared/core/types/task'
 
 interface DeleteTaskModalProps {
   open: boolean
   onClose: () => void
   onConfirm: () => Promise<void> | void
   isDeleting?: boolean
-  taskTitle?: string
-  taskId?: string
+  task?: Task
 }
 
 const DeleteTaskModal = ({
@@ -26,8 +26,7 @@ const DeleteTaskModal = ({
   onClose,
   onConfirm,
   isDeleting = false,
-  taskTitle,
-  taskId,
+  task,
 }: DeleteTaskModalProps) => {
   const handleConfirm = async () => {
     await onConfirm()
@@ -40,10 +39,12 @@ const DeleteTaskModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Trash2 className="text-destructive h-5 w-5" />
-            Excluir tarefa
+            Confirmar exclusão da tarefa
           </DialogTitle>
+
           <DialogDescription>
-            Esta ação não pode ser desfeita.
+            Essa ação é permanente e removerá a tarefa e todas as informações
+            associadas.
           </DialogDescription>
         </DialogHeader>
 
@@ -52,15 +53,24 @@ const DeleteTaskModal = ({
           <div className="border-destructive/30 bg-destructive/5 rounded-md border p-3">
             <div className="flex items-start gap-3">
               <AlertTriangle className="text-destructive mt-0.5 h-4 w-4" />
-              <div className="min-w-0 text-sm">
+
+              <div className="min-w-0 space-y-1 text-sm">
                 <p className="text-foreground font-medium">
-                  Você está prestes a excluir:
+                  Atenção: esta tarefa será excluída permanentemente
                 </p>
+
                 <p className="text-muted-foreground truncate">
-                  {taskTitle ?? 'Tarefa sem título'}
-                  {taskId && (
-                    <span className="ml-1 font-mono text-xs">({taskId})</span>
-                  )}
+                  <span className="text-foreground/80 font-medium">
+                    Título:
+                  </span>{' '}
+                  {task?.title ?? 'Tarefa sem título'}
+                </p>
+
+                <p className="text-muted-foreground truncate">
+                  <span className="text-foreground/80 font-medium">
+                    Descrição:
+                  </span>{' '}
+                  {task?.description ?? 'Tarefa sem descrição'}
                 </p>
               </div>
             </div>
