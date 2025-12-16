@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import {
   createContext,
   type FC,
@@ -8,10 +9,8 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { useRouter } from 'next/navigation'
 
 import { LocalStorage } from '@/shared/helpers'
-import { STORAGE_KEYS } from '@/shared/constants/storage-keys'
 
 interface User {
   id: string
@@ -93,4 +92,3 @@ export const useAuth = () => {
   }
   return context
 }
-

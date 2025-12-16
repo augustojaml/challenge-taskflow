@@ -1,6 +1,10 @@
 import { ReactNode } from 'react'
 
-import { AnimatedIcons, BackgroundGlow, TaskFlowLogo } from '@/shared/components'
+import {
+  AnimatedIcons,
+  BackgroundGlow,
+  TaskFlowLogo,
+} from '@/shared/components'
 
 const AuthLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (

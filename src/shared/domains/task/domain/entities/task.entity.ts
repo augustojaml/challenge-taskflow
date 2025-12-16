@@ -1,6 +1,5 @@
 import { Entity } from '@/shared/core/abstracts/entity'
 import { OptionalType } from '@/shared/core/types/optional'
-
 import { TaskStatus } from '@/shared/databases/prisma/generated/enums'
 
 type TaskEntityProps = {
@@ -77,4 +76,3 @@ class TaskEntity extends Entity<TaskEntityProps> {
 }
 
 export { TaskEntity, type TaskEntityProps }
-

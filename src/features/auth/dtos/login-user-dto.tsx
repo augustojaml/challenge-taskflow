@@ -11,5 +11,3 @@ interface LoginUserResponseDto {
 }
 
 export { type LoginUserParamsDto, type LoginUserResponseDto }
-
-

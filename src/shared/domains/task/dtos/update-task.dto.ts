@@ -27,7 +27,7 @@ const toUpdateTaskResponseDto = (task: TaskEntity) => {
 type UpdateTaskResponseDto = ReturnType<typeof toUpdateTaskResponseDto>
 
 export {
+  toUpdateTaskResponseDto,
   type UpdateTaskParamsDto,
   type UpdateTaskResponseDto,
-  toUpdateTaskResponseDto,
 }
