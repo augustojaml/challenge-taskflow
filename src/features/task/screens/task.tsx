@@ -1,21 +1,40 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { CreateTaskModal } from '@/features/task/components/create-task-modal'
 import { Task } from '@/shared/core/types/task'
+import { TaskStatus } from '@/shared/core/types/task-status'
 
 import { DeleteTaskModal } from '../components/delete-task-modal'
 import { TableData } from '../components/table-data'
 import { TaskHeader } from '../components/task-header'
+import { useDeleteMutation } from '../hooks/mutations/delete-task-mutation'
 import { useGetTasks } from '../hooks/queries/use-find-tasks'
+
+export interface DefaultTask {
+  id: string
+  title: string
+  description: string
+  status: TaskStatus
+}
+
+const DEFAULT_TASK_VALUE: DefaultTask = {
+  id: '',
+  title: '',
+  description: '',
+  status: 'PENDING',
+}
 
 const TaskScreen = () => {
   const [openModalCreate, setOpenModalCreate] = useState(false)
   const [openModalDelete, setOpenModalDelete] = useState(false)
   const [selectedTask, setSelectedTask] = useState<Task | undefined>(undefined)
+  const [defaultTask, setDefaultTask] =
+    useState<DefaultTask>(DEFAULT_TASK_VALUE)
 
   const { data: tasks, isLoading: isTasksLoading } = useGetTasks()
+  const deleteTask = useDeleteMutation()
 
   const handleSelectTask = (task: Task) => {
     setSelectedTask(task)
@@ -27,11 +46,27 @@ const TaskScreen = () => {
     setOpenModalDelete(true)
   }
 
+  useEffect(() => {
+    if (selectedTask) {
+      setDefaultTask({
+        id: selectedTask.id,
+        title: selectedTask.title,
+        description: selectedTask.description,
+        status: selectedTask.status,
+      })
+    } else {
+      setDefaultTask(DEFAULT_TASK_VALUE)
+    }
+  }, [selectedTask])
+
   return (
     <div className="w-full py-6">
       <TaskHeader
         hasData={!!tasks && tasks.length > 0}
-        onOpen={() => setOpenModalCreate(true)}
+        onOpen={() => {
+          setSelectedTask(undefined)
+          setOpenModalCreate(true)
+        }}
       />
 
       <TableData
@@ -44,16 +79,22 @@ const TaskScreen = () => {
 
       <CreateTaskModal
         open={openModalCreate}
-        onClose={() => setOpenModalCreate(false)}
-        defaultValues={selectedTask}
+        onClose={() => {
+          setOpenModalCreate(false)
+          setSelectedTask(undefined)
+        }}
+        defaultValues={defaultTask}
       />
 
       <DeleteTaskModal
         open={openModalDelete}
-        onClose={() => setOpenModalDelete(false)}
+        onClose={() => {
+          setOpenModalDelete(false)
+          setSelectedTask(undefined)
+        }}
         task={selectedTask || undefined}
-        // isDeleting={deleteTaskMT.isPending}
-        onConfirm={() => console.log('deleting...')}
+        isDeleting={deleteTask.isPending}
+        onConfirm={() => deleteTask.mutateAsync(selectedTask?.id || '')}
       />
     </div>
   )

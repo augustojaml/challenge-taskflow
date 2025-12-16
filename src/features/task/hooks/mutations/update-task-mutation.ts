@@ -3,23 +3,23 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { QUERY_KEYS } from '@/shared/constants/query-keys'
 import { useToast } from '@/shared/providers/toast-provider'
 
-import { CreateTaskParamsDto } from '../../dtos/create-task-dto'
+import { UpdateTaskParamsDto } from '../../dtos/update-task-dto'
 import { TaskService } from '../../services/task-service'
 
-const useCreateMutation = () => {
+const useUpdateMutation = () => {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   return useMutation({
-    mutationFn: async (data: CreateTaskParamsDto) => {
-      const task = await TaskService.create(data)
+    mutationFn: async (data: UpdateTaskParamsDto) => {
+      const task = await TaskService.update(data.id, data)
       return task
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.FIND_TASKS] })
       showToast({
         type: 'success',
-        title: 'Tarefa criada com sucesso! 🎉',
-        message: 'A nova tarefa foi adicionada à sua lista',
+        title: 'Tarefa atualizada com sucesso! 🎉',
+        message: 'A tarefa foi atualizada na lista',
         position: 'top-right',
         duration: 5000,
       })
@@ -27,7 +27,7 @@ const useCreateMutation = () => {
     onError: () => {
       showToast({
         type: 'error',
-        title: 'Ocorreu um erro ao criar a tarefa',
+        title: 'Ocorreu um erro ao atualizar a tarefa',
         message: 'Por favor, tente novamente',
         position: 'top-right',
         duration: 5000,
@@ -36,4 +36,4 @@ const useCreateMutation = () => {
   })
 }
 
-export { useCreateMutation }
+export { useUpdateMutation }

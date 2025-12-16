@@ -1,14 +1,13 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import {
   CreateTaskSchema,
   createTaskSchema,
 } from '@/features/task/skemas/create-task-schema'
-import { ProcessMessageResponse } from '@/shared/components'
 
 import { InputIcon } from '../../../shared/components/custom/input-icon'
 import { TextareaIcon } from '../../../shared/components/custom/textare-icon'
@@ -28,11 +27,13 @@ import {
   SelectValue,
 } from '../../../shared/components/shadcn/select'
 import { useCreateMutation } from '../hooks/mutations/create-task-mutation'
+import { useUpdateMutation } from '../hooks/mutations/update-task-mutation'
+import { DefaultTask } from '../screens/task'
 
 type CreateTaskModalProps = {
   open: boolean
   onClose: () => void
-  defaultValues?: CreateTaskSchema
+  defaultValues?: DefaultTask
 }
 
 export function CreateTaskModal({
@@ -48,112 +49,128 @@ export function CreateTaskModal({
     formState: { errors },
   } = useForm<CreateTaskSchema>({
     resolver: zodResolver(createTaskSchema),
-    defaultValues: defaultValues || {
+    mode: 'all',
+  })
+
+  const createTask = useCreateMutation()
+  const updateTask = useUpdateMutation()
+
+  const onReset = useCallback(() => {
+    reset({
       title: '',
       description: '',
       status: 'PENDING',
-    },
-    mode: 'onBlur',
-  })
+    })
+    onClose()
+  }, [onClose, reset])
 
-  useEffect(() => {
-    if (open && defaultValues) {
-      reset(defaultValues)
-    } else if (open && !defaultValues) {
-      reset({
-        title: '',
-        description: '',
-        status: 'PENDING',
+  const onSubmitForm = handleSubmit(async (data: CreateTaskSchema) => {
+    if (!defaultValues?.id) {
+      await createTask.mutateAsync({
+        ...data,
+        status: data.status || 'PENDING',
+      })
+    } else {
+      await updateTask.mutateAsync({
+        id: defaultValues.id,
+        ...data,
+        status: data.status || 'PENDING',
       })
     }
-  }, [open, defaultValues, reset])
+    onReset()
+  })
+  const confirmButtonRef = useRef<HTMLButtonElement>(null)
+  const formKey = open ? (defaultValues?.id ?? 'create') : 'closed'
 
-  const createTask = useCreateMutation()
-
-  const handleSubmitForm = async (data: CreateTaskSchema) => {
-    await createTask.mutateAsync({
-      ...data,
-      status: data.status || 'PENDING',
-    })
-    reset()
-    onClose()
-  }
+  useEffect(() => {
+    if (defaultValues) {
+      reset({
+        title: defaultValues.title,
+        description: defaultValues.description,
+        status: defaultValues.status,
+      })
+    }
+  }, [defaultValues, reset])
 
   return (
-    <ProcessMessageResponse
-      titleSuccess="Tarefa criada com sucesso! 🎉"
-      successMessage="A nova tarefa foi adicionada à sua lista."
-      error={createTask.error}
-      isSuccess={createTask.isSuccess}
-      titleError="Erro ao criar tarefa"
-    >
-      <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Criar nova tarefa</DialogTitle>
-          </DialogHeader>
+    <Dialog open={open} onOpenChange={onReset}>
+      <DialogContent
+        className="sm:max-w-lg"
+        onOpenAutoFocus={(event) => {
+          event.preventDefault()
+        }}
+      >
+        <DialogHeader>
+          <DialogTitle>Criar nova tarefa</DialogTitle>
+        </DialogHeader>
 
-          <form onSubmit={handleSubmit(handleSubmitForm)} className="space-y-6">
-            <InputIcon
-              id="title"
-              label="Título"
-              placeholder="Digite o título da tarefa"
-              {...register('title')}
+        <form key={formKey} className="space-y-6">
+          <InputIcon
+            id="title"
+            label="Título"
+            placeholder="Digite o título da tarefa"
+            {...register('title')}
+            disabled={createTask.isPending}
+            error={errors.title?.message}
+          />
+
+          <TextareaIcon
+            id="description"
+            label="Descrição"
+            placeholder="Digite a descrição da tarefa"
+            {...register('description')}
+            disabled={createTask.isPending}
+            error={errors.description?.message}
+          />
+
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <div className="space-y-1.5">
+                <Label>Status</Label>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={createTask.isPending}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o status" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="PENDING">Pendente</SelectItem>
+                    <SelectItem value="IN_PROGRESS">Em andamento</SelectItem>
+                    <SelectItem value="COMPLETED">Concluída</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          />
+
+          <div className="flex justify-end gap-3 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                onReset()
+              }}
               disabled={createTask.isPending}
-              error={errors.title?.message}
-            />
+            >
+              Cancelar
+            </Button>
 
-            <TextareaIcon
-              id="description"
-              label="Descrição"
-              placeholder="Digite a descrição da tarefa"
-              {...register('description')}
+            <Button
+              ref={confirmButtonRef}
+              type="submit"
+              onClick={onSubmitForm}
               disabled={createTask.isPending}
-              error={errors.description?.message}
-            />
-
-            <Controller
-              name="status"
-              control={control}
-              render={({ field }) => (
-                <div className="space-y-1.5">
-                  <Label>Status</Label>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={createTask.isPending}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o status" />
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      <SelectItem value="PENDING">Pendente</SelectItem>
-                      <SelectItem value="IN_PROGRESS">Em andamento</SelectItem>
-                      <SelectItem value="COMPLETED">Concluída</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-            />
-
-            <div className="flex justify-end gap-3 pt-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                disabled={createTask.isPending}
-              >
-                Cancelar
-              </Button>
-
-              <Button type="submit" disabled={createTask.isPending}>
-                Criar tarefa
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </ProcessMessageResponse>
+            >
+              {defaultValues?.id ? 'Atualizar tarefa' : 'Criar tarefa'}
+            </Button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }

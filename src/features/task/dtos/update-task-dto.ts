@@ -1,9 +1,10 @@
 import { TaskStatus } from '@/shared/core/types/task-status'
 
-interface CreateTaskParamsDto {
+interface UpdateTaskParamsDto {
+  id: string
   title: string
   description: string
   status: TaskStatus
 }
 
-export { type CreateTaskParamsDto }
+export { type UpdateTaskParamsDto }

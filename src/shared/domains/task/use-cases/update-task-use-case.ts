@@ -2,6 +2,7 @@ import { ResourceNotFoundError } from '@/shared/core/errors/resource-not-found-e
 import { UnauthorizedError } from '@/shared/core/errors/unauthorized-error'
 
 import { AuthUserRepositoryPort } from '../../auth/domain/repositories/user-repository-port'
+import { TaskEntity } from '../domain/entities/task.entity'
 import { TaskRepositoryPort } from '../domain/repositories/task-repository-port'
 import {
   toUpdateTaskResponseDto,
@@ -44,7 +45,18 @@ class UpdateTaskUseCase {
       task.status = data.status
     }
 
-    const updatedTask = await this.taskRepository.update(task)
+    const updatedTask = await this.taskRepository.update(
+      TaskEntity.create(
+        {
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          userId: task.userId,
+          updatedAt: new Date(),
+        },
+        task.id,
+      ),
+    )
 
     return toUpdateTaskResponseDto(updatedTask)
   }

@@ -4,7 +4,7 @@ import { ButtonWithLoading } from '@/shared/components'
 
 interface TaskTableHeaderProps {
   hasData?: boolean
-  onOpen?: () => void
+  onOpen: () => void
 }
 
 const TaskHeader = ({ hasData, onOpen }: TaskTableHeaderProps) => {
@@ -24,8 +24,8 @@ const TaskHeader = ({ hasData, onOpen }: TaskTableHeaderProps) => {
       {/* button aligned right */}
       <ButtonWithLoading
         iconLeft={PlusIcon}
-        disabled={!hasData}
         onClick={onOpen}
+        disabled={!hasData}
       >
         Create Task
       </ButtonWithLoading>

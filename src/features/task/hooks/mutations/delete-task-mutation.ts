@@ -3,31 +3,30 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { QUERY_KEYS } from '@/shared/constants/query-keys'
 import { useToast } from '@/shared/providers/toast-provider'
 
-import { CreateTaskParamsDto } from '../../dtos/create-task-dto'
 import { TaskService } from '../../services/task-service'
 
-const useCreateMutation = () => {
+const useDeleteMutation = () => {
   const queryClient = useQueryClient()
   const { showToast } = useToast()
   return useMutation({
-    mutationFn: async (data: CreateTaskParamsDto) => {
-      const task = await TaskService.create(data)
+    mutationFn: async (taskId: string) => {
+      const task = await TaskService.delete(taskId)
       return task
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.FIND_TASKS] })
       showToast({
         type: 'success',
-        title: 'Tarefa criada com sucesso! 🎉',
-        message: 'A nova tarefa foi adicionada à sua lista',
+        title: 'Tarefa deletada com sucesso! 🎉',
+        message: 'A tarefa foi removida da sua lista',
         position: 'top-right',
         duration: 5000,
       })
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.FIND_TASKS] })
     },
     onError: () => {
       showToast({
         type: 'error',
-        title: 'Ocorreu um erro ao criar a tarefa',
+        title: 'Ocorreu um erro ao deletar a tarefa',
         message: 'Por favor, tente novamente',
         position: 'top-right',
         duration: 5000,
@@ -36,4 +35,4 @@ const useCreateMutation = () => {
   })
 }
 
-export { useCreateMutation }
+export { useDeleteMutation }
