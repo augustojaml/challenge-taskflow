@@ -3,9 +3,9 @@ import { UnauthorizedError } from '@/shared/core/errors/unauthorized-error'
 import { AuthUserRepositoryPort } from '../../auth/domain/repositories/user-repository-port'
 import { TaskRepositoryPort } from '../domain/repositories/task-repository-port'
 import {
-  FindTasksParamsDto,
-  FindTasksResponseDto,
-  toFindTasksResponseDto,
+  FindTaskPaginationDto,
+  FindTasksResponsePaginationResponseDto,
+  toFindTasksResponsePaginationResponseDto,
 } from '../dtos/find-tasks.dto'
 
 class FindTasksUseCase {
@@ -14,16 +14,24 @@ class FindTasksUseCase {
     private readonly userRepository: AuthUserRepositoryPort,
   ) {}
 
-  async execute(data: FindTasksParamsDto): Promise<FindTasksResponseDto> {
+  async execute(
+    data: FindTaskPaginationDto,
+  ): Promise<FindTasksResponsePaginationResponseDto> {
     const user = await this.userRepository.findById(data.userId)
 
     if (!user) {
       throw new UnauthorizedError()
     }
 
-    const tasks = await this.taskRepository.findByUserId(data.userId)
+    const result = await this.taskRepository.findByUserIdPaginated({
+      userId: data.userId,
+      page: data.page || 1,
+      size: data.size || 5,
+      title: data.title,
+      status: data.status,
+    })
 
-    return toFindTasksResponseDto(tasks)
+    return toFindTasksResponsePaginationResponseDto(result)
   }
 }
 

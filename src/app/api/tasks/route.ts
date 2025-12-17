@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { createTaskSchema } from '@/features/task/skemas/create-task-schema'
+import { TaskStatus } from '@/shared/core/types/task-status'
 import { taskFactory } from '@/shared/databases/prisma/factories/task-factory'
 
 /**
@@ -195,10 +196,23 @@ export async function GET(request: NextRequest) {
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+    const { searchParams } = new URL(request.url)
+    console.log(searchParams)
+
+    const page = Number(searchParams.get('page') ?? 1)
+    const size = Number(searchParams.get('size') ?? 10)
+    const title = searchParams.get('title') ?? undefined
+    const status = searchParams.get('status')
 
     const factory = taskFactory.findTasks()
 
-    const result = await factory.execute({ userId })
+    const result = await factory.execute({
+      userId,
+      page,
+      size,
+      title,
+      status: status as TaskStatus,
+    })
 
     return NextResponse.json(result)
   } catch (error) {

@@ -33,7 +33,13 @@ const TaskScreen = () => {
   const [defaultTask, setDefaultTask] =
     useState<DefaultTask>(DEFAULT_TASK_VALUE)
 
-  const { data: tasks, isLoading: isTasksLoading } = useGetTasks()
+  const [page, setPage] = useState(1)
+  const [size, setSize] = useState(5)
+
+  const { data: result, isLoading: isTasksLoading } = useGetTasks({
+    page: page,
+    size: size,
+  })
   const deleteTask = useDeleteMutation()
 
   const handleSelectTask = (task: Task) => {
@@ -62,7 +68,7 @@ const TaskScreen = () => {
   return (
     <div className="w-full py-6">
       <TaskHeader
-        hasData={!!tasks && tasks.length > 0}
+        hasData={!!result?.items && result?.items.length > 0}
         onOpen={() => {
           setSelectedTask(undefined)
           setOpenModalCreate(true)
@@ -72,9 +78,17 @@ const TaskScreen = () => {
       <TableData
         onDelete={handleDeleteTask}
         onSelect={handleSelectTask}
-        isLoading={isTasksLoading}
-        data={tasks || []}
         onOpenCreate={() => setOpenModalCreate(true)}
+        onPageChange={(newPage) => setPage(newPage)}
+        onSizeChange={(newSize) => {
+          setPage(1)
+          setSize(newSize)
+        }}
+        isLoading={isTasksLoading}
+        data={result?.items || []}
+        total={result?.total || 0}
+        page={result?.page || 1}
+        size={result?.size || 5}
       />
 
       <CreateTaskModal

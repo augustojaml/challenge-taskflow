@@ -1,7 +1,9 @@
+import { TaskStatus } from '@/shared/core/types/task-status'
 import { TaskEntity } from '@/shared/domains/task/domain/entities/task.entity'
 import { TaskRepositoryPort } from '@/shared/domains/task/domain/repositories/task-repository-port'
 
 import { prisma } from '..'
+import { Prisma } from '../generated/client'
 import { prismaTaskMapper } from '../mappers/task-mapper'
 
 class PrismaTaskRepositoryAdapter implements TaskRepositoryPort {
@@ -47,6 +49,54 @@ class PrismaTaskRepositoryAdapter implements TaskRepositoryPort {
     await prisma.task.delete({
       where: { id },
     })
+  }
+
+  async findByUserIdPaginated(props: {
+    userId: string
+    page?: number
+    size?: number
+    title?: string
+    status?: TaskStatus
+  }): Promise<{
+    items: TaskEntity[]
+    total: number
+    page: number
+    size: number
+  }> {
+    const page = Math.max(1, props.page ?? 1)
+    const size = Math.max(1, props.size ?? 10)
+    const skip = (page - 1) * size
+
+    const where: Prisma.TaskWhereInput = {
+      AND: [
+        { userId: props.userId },
+        props.title
+          ? {
+              title: {
+                contains: props.title,
+              },
+            }
+          : {},
+        props.status ? { status: props.status } : {},
+      ],
+    }
+
+    const [total, rows] = await prisma.$transaction([
+      prisma.task.count({ where }),
+      prisma.task.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: size,
+      }),
+    ])
+
+    return {
+      items: rows.map(prismaTaskMapper.toDomain),
+      total,
+      page,
+      size,
+    }
   }
 }
 

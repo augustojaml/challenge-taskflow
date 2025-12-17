@@ -27,13 +27,16 @@ describe('FIND TASKS USE CASE', () => {
     const task2 = await taskFakeRepo({ repo: taskRepo, userId: user.id })
     const task3 = await taskFakeRepo({ repo: taskRepo, userId: user.id })
 
-    const result = await sut.execute({
+    const { result } = await sut.execute({
       userId: user.id,
     })
 
-    expect(result.tasks).toHaveLength(3)
-    expect(result.tasks).toEqual(
-      expect.arrayContaining([
+    console.log(result)
+
+    expect(result.items).toHaveLength(3)
+
+    expect(result).toMatchObject({
+      items: expect.arrayContaining([
         expect.objectContaining({
           id: task1.id,
           userId: user.id,
@@ -56,7 +59,10 @@ describe('FIND TASKS USE CASE', () => {
           status: task3.status,
         }),
       ]),
-    )
+      total: 3,
+      page: 1,
+      size: 5,
+    })
   })
 
   it('Should not be able to find tasks with inexistent user', async () => {

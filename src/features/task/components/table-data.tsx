@@ -23,16 +23,26 @@ interface TableDataProps {
   onDelete?: (task: Task) => void
   onSelect?: (task: Task) => void
   onOpenCreate?: () => void
+  onPageChange?: (page: number) => void
+  onSizeChange?: (size: number) => void
   isLoading?: boolean
   data?: Task[]
+  total?: number
+  page?: number
+  size?: number
 }
 
 const TableData = ({
   onDelete,
   onSelect,
   onOpenCreate,
+  onPageChange,
+  onSizeChange,
   isLoading,
   data,
+  total = 0,
+  page = 1,
+  size = 5,
 }: TableDataProps) => {
   const handleDelete = (task: Task) => {
     onDelete?.(task)
@@ -120,7 +130,15 @@ const TableData = ({
           </>
         )}
       </div>
-      {data && data.length > 0 && <TablePagination />}
+      {data && data.length > 0 && (
+        <TablePagination
+          total={total}
+          page={page || 1}
+          size={size}
+          onPageChange={onPageChange}
+          onSizeChange={onSizeChange}
+        />
+      )}
     </>
   )
 }
