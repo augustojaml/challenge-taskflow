@@ -181,15 +181,14 @@ JWT_EXPIRES_IN=7d
 | Filtros e paginação não expostos no dashboard | ✅ | TaskService já aceita `page`, `size`, `status`, `title` e agora os controles estão expostos no dashboard com Tarefa/Status. |
 | Testes de UI (React Testing Library) nos componentes principais | ✅ | Componentes de formulários e dashboard têm testes React Testing Library cobrindo estados críticos, validando inputs e interações. |
 | Diferenciais (refresh tokens, CI, deploy) | ✅ | Swagger + Docker entregues; GitHub Actions CI (`.github/workflows/ci.yml`) e fluxo de deploy dev já configurados; só faltam refresh tokens. |
-| Automatizar pipeline (GitHub Actions) com `pnpm lint` e `pnpm test` | ✅ | Workflow `.github/workflows/ci.yml` roda lint+test em cada push/PR; Corepack habilita `pnpm` e os scripts usam `pnpm install --frozen-lockfile`. |
+| Automatizar pipeline (GitHub Actions) com `pnpm lint` e `pnpm test` | ✅ | Workflow `.github/workflows/ci.yml` roda `pnpm lint` e `pnpm test` em cada push/commit, mas pode ser estendido para pull requests com o mesmo job e variáveis de ambiente definidas. |
 
 ## Problemas conhecidos 🐞
 - Nenhum problema crítico aberto no momento — filtros/paginação, cobertura UI e fluxos principais já foram atendidos, e o pipeline CI/CD permanece ativo para evitar regressões.
 
 ## Próximos passos 🚀
-1. Colocar os filtros/pesquisa/paginação na UI de tarefas e alinhar com query params existentes.
-2. Expandir cobertura de testes: React Testing Library (formulários/dashboard) + testes de integração para todos os endpoints (Supertest) + novos cenários E2E.
-3. Consolidar a documentação (README, `/docs` e `API.md`) e promover os links em templates/processos de entrega.
+1. Implementar refresh tokens no fluxo completo de autenticação para renovar credenciais sem obrigar logout e simplificar a transição entre ambientes (dev/CI).
+2 - Expandir cobertura de testes: React Testing Library (formulários/dashboard) + testes de integração para todos os endpoints (Supertest) + novos cenários E2E.
 
 ## Tecnologias usadas 🛠️
 ![Docker](https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white) ![Next.js](https://img.shields.io/badge/next.js-000000?style=flat&logo=next.js&logoColor=white) ![React](https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-3178C6?style=flat&logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/tailwindcss-06B6D4?style=flat&logo=tailwind-css&logoColor=white) ![Prisma](https://img.shields.io/badge/prisma-2D3748?style=flat&logo=prisma&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white) ![Vitest](https://img.shields.io/badge/vitest-fe4c3a?style=flat&logo=vitest&logoColor=white) ![Swagger](https://img.shields.io/badge/swagger-85EA2D?style=flat&logo=swagger&logoColor=black) ![PNPM](https://img.shields.io/badge/pnpm-F69220?style=flat&logo=pnpm&logoColor=white)
