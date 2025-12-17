@@ -5,8 +5,8 @@ POST {{baseUrl}}/api/auth/register
 Content-Type: application/json
 
 {
-  "name": "João Silva",
-  "email": "joao@example.com",
+  "name": "Augusto Monteiro",
+  "email": "augusto@example.com",
   "password": "SenhaForte123"
 }
 
@@ -15,7 +15,7 @@ POST {{baseUrl}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "joao@example.com",
+  "email": "augusto@example.com",
   "password": "SenhaForte123"
 }
 
@@ -23,13 +23,13 @@ Content-Type: application/json
 GET {{baseUrl}}/api/auth/me
 Authorization: Bearer <token>
 x-user-id: <user-id>
-x-user-email: joao@example.com
+x-user-email: augusto@example.com
 
 ### List tasks (paginated)
 GET {{baseUrl}}/api/tasks?page=1&size=10
 Authorization: Bearer <token>
 x-user-id: <user-id>
-x-user-email: joao@example.com
+x-user-email: augusto@example.com
 
 ### Create a task
 POST {{baseUrl}}/api/tasks
