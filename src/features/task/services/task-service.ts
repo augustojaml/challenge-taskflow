@@ -12,8 +12,12 @@ const TaskService = {
   findAll: async ({
     page = 1,
     size = 5,
+    title,
+    status,
   }: FindAllTasksParamsDto): Promise<FindAllTasksResponseDto> => {
-    const { data } = await api.get(`/tasks?page=${page}&size=${size}`)
+    const { data } = await api.get(
+      `/tasks?page=${page}&size=${size}&title=${title}&status=${status}`,
+    )
 
     return data.result
   },

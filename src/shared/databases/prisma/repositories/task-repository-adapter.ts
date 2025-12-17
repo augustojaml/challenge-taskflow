@@ -67,10 +67,12 @@ class PrismaTaskRepositoryAdapter implements TaskRepositoryPort {
     const size = Math.max(1, props.size ?? 10)
     const skip = (page - 1) * size
 
+    console.log(props.title)
+
     const where: Prisma.TaskWhereInput = {
       AND: [
         { userId: props.userId },
-        props.title
+        props.title?.length
           ? {
               title: {
                 contains: props.title,

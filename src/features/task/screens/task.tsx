@@ -35,10 +35,14 @@ const TaskScreen = () => {
 
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(5)
+  const [title] = useState('')
+  const [status] = useState('')
 
   const { data: result, isLoading: isTasksLoading } = useGetTasks({
     page: page,
     size: size,
+    title: title,
+    status: status as TaskStatus,
   })
   const deleteTask = useDeleteMutation()
 

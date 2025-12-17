@@ -177,7 +177,12 @@ describe('API Auth E2E', () => {
 
     expect(response.status).toBe(200)
     expect(response.body).toMatchObject({
-      tasks: expect.any(Array),
+      result: {
+        items: expect.any(Array),
+        total: expect.any(Number),
+        page: expect.any(Number),
+        size: expect.any(Number),
+      },
     })
   })
   it('should be able to update a task successfully', async () => {
