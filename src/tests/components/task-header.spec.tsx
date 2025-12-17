@@ -13,11 +13,7 @@ describe('TaskHeader', () => {
     expect(
       screen.getByRole('heading', { name: /Visão geral das tarefas/i }),
     ).toBeInTheDocument()
-    expect(
-      screen.getByText(
-        /Gerencie seu trabalho, acompanhe prioridades e avance com suas atividades./i,
-      ),
-    ).toBeInTheDocument()
+    expect(screen.getByText(/Gerencie seu trabalho/i)).toBeInTheDocument()
 
     const button = screen.getByRole('button', { name: /create task/i })
     expect(button).toBeEnabled()

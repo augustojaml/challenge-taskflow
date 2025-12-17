@@ -118,6 +118,17 @@ describe('API Auth E2E', () => {
     })
   })
 
+  it('should return 401 when invalid token is used to fetch profile', async () => {
+    const response = await agent
+      .get('/api/auth/me')
+      .set('Authorization', 'Bearer invalid-token')
+
+    expect(response.status).toBe(401)
+    expect(response.body).toMatchObject({
+      error: expect.any(String),
+    })
+  })
+
   it('should be able to create a task successfully', async () => {
     const hashedPassword = await bcrypt.hash(testUser.password, 10)
 
