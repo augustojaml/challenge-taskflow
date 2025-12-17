@@ -1,78 +1,22 @@
-name: CI
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: hubfyai-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hubfyai_db
+      MYSQL_USER: hubfyai
+      MYSQL_PASSWORD: hubfyai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: hubfyai_shadow
-          # Isso permite conexões de qualquer host dentro do Docker
-          MYSQL_ROOT_HOST: "%"
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=10
-
-    env:
-      DATABASE_URL: mysql://root:root@127.0.0.1:3306/hubfyai_shadow
-      DB_HOST: 127.0.0.1
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_NAME: hubfyai_shadow
-      NODE_ENV: test
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # Instala o cliente mysql para que o comando mysqladmin funcione no runner
-      - name: Install MySQL Client
-        run: sudo apt-get update && sudo apt-get install -y mysql-client
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Wait for MySQL
-        run: |
-          echo "Waiting for MySQL..."
-          # Usamos 127.0.0.1 em vez de localhost para evitar problemas de socket Unix
-          until mysqladmin ping -h 127.0.0.1 -u root -proot --silent; do
-            echo "MySQL not ready yet..."
-            sleep 2
-          done
-          echo "MySQL is up!"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate Prisma Client
-        run: pnpm db:generate
-
-      - name: Run migrations
-        run: pnpm db:migrate
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Test
-        run: pnpm test
+volumes:
+  mysql_data:
