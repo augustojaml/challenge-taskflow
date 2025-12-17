@@ -9,6 +9,7 @@ import { TaskStatus } from '@/shared/core/types/task-status'
 import { DeleteTaskModal } from '../components/delete-task-modal'
 import { TableData } from '../components/table-data'
 import { TaskHeader } from '../components/task-header'
+import { TaskSearch } from '../components/task-search'
 import { useDeleteMutation } from '../hooks/mutations/delete-task-mutation'
 import { useGetTasks } from '../hooks/queries/use-find-tasks'
 
@@ -35,8 +36,8 @@ const TaskScreen = () => {
 
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(5)
-  const [title] = useState('')
-  const [status] = useState('')
+  const [title, setTitle] = useState('')
+  const [status, setStatus] = useState('')
 
   const { data: result, isLoading: isTasksLoading } = useGetTasks({
     page: page,
@@ -79,6 +80,16 @@ const TaskScreen = () => {
         }}
       />
 
+      <TaskSearch
+        onChange={({ search, status: statusSearch }) => {
+          setTitle(search)
+          if (statusSearch === 'ALL') {
+            setStatus('')
+          } else {
+            setStatus(statusSearch)
+          }
+        }}
+      />
       <TableData
         onDelete={handleDeleteTask}
         onSelect={handleSelectTask}

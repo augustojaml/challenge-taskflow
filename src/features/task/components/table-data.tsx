@@ -67,7 +67,6 @@ const TableData = ({
                     <TableHead>Descrição</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Criada em</TableHead>
-                    <TableHead>Atualizada em</TableHead>
                     <TableHead className="w-22.5 text-right">Ações</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -94,9 +93,6 @@ const TableData = ({
                         {formatTimeBR(task.createdAt, {
                           timeStyle: 'short',
                         })}{' '}
-                      </TableCell>
-                      <TableCell>
-                        {formatTimeBR(task.updatedAt, { timeStyle: 'short' })}
                       </TableCell>
 
                       {/* Actions */}

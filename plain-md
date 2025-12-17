@@ -115,7 +115,7 @@ Este documento analisa o estado atual do projeto de gestão de tarefas desenvolv
 - ✅ **Validação**: Zod em todos os endpoints
 - ✅ **Formulários**: React Hook Form implementado
 - ✅ **Gerenciamento de Estado**: TanStack Query (React Query)
-- ✅ **Arquitetura em Camadas**: 
+- ✅ **Arquitetura em Camadas**:
   - Controllers (API Routes)
   - Services
   - Use Cases
@@ -422,3 +422,6 @@ Com essas implementações, o projeto estará completo e pronto para entrega, at
 
 
 
+
+task = informcoes database em .env, database\mysql\init.sql src\tests\e2e\api.spec.ts
+create account - regirect login time

@@ -21,7 +21,6 @@ export const TasksTableSkeleton = ({ rows = 5 }: TableSkeletonProps) => {
           <TableHead className="min-w-70">Descrição</TableHead>
           <TableHead className="min-w-35">Status</TableHead>
           <TableHead className="min-w-35">Criada em</TableHead>
-          <TableHead className="min-w-40">Atualizada em</TableHead>
         </TableRow>
       </TableHeader>
 
