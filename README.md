@@ -113,15 +113,15 @@ Browser
 - `api.http` reúne requests de registro, login, `/api/auth/me`, CRUD de `/api/tasks` e `/api/health` com variáveis `{{baseUrl}}` para facilitar execuções rápidas (REST Client, Insomnia, etc).
 
 ## Imagens / capturas
-- ![Login](imgs/task-login.png) - Tela de login.  
-- ![Cadastro](imgs/task-register.png) - Formulário de registro com validações.  
-- ![Dashboard](imgs/tasks.png) - Tabela do dashboard (filtros estão planejados).  
-- ![Criação de tarefa](imgs/tas-create.png) - Modal de criar tarefa.  
+- ![Login](imgs/task-login.png) - Tela de login.
+- ![Cadastro](imgs/task-register.png) - Formulário de registro com validações.
+- ![Dashboard](imgs/tasks.png) - Tabela do dashboard (filtros estão planejados).
+- ![Criação de tarefa](imgs/tas-create.png) - Modal de criar tarefa.
 - ![Exclusão](imgs/task-delete.png) - Modal de exclusão, texto quebrando corretamente.
 
 ## Automatizar pipeline (GitHub Actions)
-1. Configure um workflow que rode `pnpm lint` e `pnpm test` em cada push/pull request.  
-2. Em commits prontos para produção, adicione etapas de `pnpm build` seguidas por deploy automático em Vercel ou Railway (use secrets `VERCEL_TOKEN`/`RAILWAY_TOKEN`).  
+1. Configure um workflow que rode `pnpm lint` e `pnpm test` em cada push/pull request.
+2. Em commits prontos para produção, adicione etapas de `pnpm build` seguidas por deploy automático em Vercel ou Railway (use secrets `VERCEL_TOKEN`/`RAILWAY_TOKEN`).
 3. Garanta que o pipeline valide lint → testes → build antes do deploy, conforme o fluxo descrito nos comandos acima.
 
 ## Variáveis de ambiente 🌦️
@@ -184,15 +184,6 @@ JWT_EXPIRES_IN=7d
 - ⚠️ **Cobertura E2E parcial:** existe apenas um cenário que cria usuário, login e CRUD limitado; falta cobertura de rota protegida e fluxos completos.
 - ⚠️ **Sem refresh tokens ou proteção CSRF:** foco em JWT simples para cumprir o escopo imediato do desafio.
 - ⚠️ **Testes de UI (React Testing Library) ausentes:** apenas use cases são testados; componentes e validações do formulário podem quebrar sem cobertura.
-
-## Tempo investido ⏱️
-| Atividade | Horas gastas (aproximado) |
-| --- | --- |
-| Arquitetura + backend (auth + tasks + Prisma) | 8h |
-| Frontend (layouts, modais, providers) | 4h |
-| Testes (unitários + e2e + helpers) | 4h |
-| Documentação, ajustes e docker | 2h |
-| **Total** | **18h** |
 
 ## Próximos passos 🚀
 1. Colocar os filtros/pesquisa/paginação na UI de tarefas e alinhar com query params existentes.
