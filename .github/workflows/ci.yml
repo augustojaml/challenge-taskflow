@@ -2,15 +2,12 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   test:
-    name: Lint & Test
     runs-on: ubuntu-latest
 
     services:
@@ -19,58 +16,74 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: hubfyai_shadow
+          MYSQL_ROOT_HOST: "%"
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost"
+          --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=5
+          --health-retries=10
+        # Se o seu arquivo SQL de init estiver no repo, descomente a linha abaixo:
+        # volumes:
+        #   - ${{ github.workspace }}/caminho/do/seu/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     env:
-      DB_HOST: localhost
+      # Usando 127.0.0.1 para garantir conexão TCP
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/hubfyai_shadow
+      DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: root
       DB_NAME: hubfyai_shadow
-      DATABASE_URL: mysql://root:root@localhost:3306/hubfyai_shadow
+      NODE_ENV: test
       JWT_SECRET: test-secret-key
       JWT_EXPIRES_IN: 7d
-      NODE_ENV: test
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install MySQL Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
+      - name: Wait for MySQL
+        run: |
+          echo "Waiting for MySQL to be ready..."
+          # Tentativas de conexão usando o cliente instalado
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -u root -proot --silent; then
+              echo "MySQL is up and running!"
+              exit 0
+            fi
+            echo "MySQL not ready yet ($i/30)..."
+            sleep 2
+          done
+          echo "MySQL failed to start"
+          exit 1
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Wait for MySQL
-        run: |
-          until mysqladmin ping -h"localhost" -P"3306" -u"root" -p"root" --silent; do
-            echo 'Waiting for MySQL...'
-            sleep 2
-          done
-          echo 'MySQL is ready!'
+      - name: Generate Prisma Client
+        run: pnpm db:generate
 
       - name: Run migrations
         run: pnpm db:migrate
-        # Ajuste o comando acima conforme seu projeto:
-        # - Prisma: pnpm prisma migrate deploy
-        # - Drizzle: pnpm drizzle-kit push
-        # - Knex: pnpm knex migrate:latest
 
       - name: Lint
         run: pnpm lint
 
-      - name: Test (unit + e2e + components)
+      - name: Test
         run: pnpm test
