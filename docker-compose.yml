@@ -16,18 +16,19 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: hubfyai_shadow
+          # Isso permite conexões de qualquer host dentro do Docker
+          MYSQL_ROOT_HOST: "%"
         ports:
           - 3306:3306
         options: >-
-          --default-authentication-plugin=mysql_native_password
-          --health-cmd="mysqladmin ping -h localhost -u root -proot --protocol=tcp --silent"
+          --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
 
     env:
-      DATABASE_URL: mysql://root:root@localhost:3306/hubfyai_shadow
-      DB_HOST: localhost
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/hubfyai_shadow
+      DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: root
@@ -37,6 +38,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Instala o cliente mysql para que o comando mysqladmin funcione no runner
+      - name: Install MySQL Client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
 
       - name: Enable Corepack
         run: corepack enable
@@ -50,19 +55,12 @@ jobs:
       - name: Wait for MySQL
         run: |
           echo "Waiting for MySQL..."
-          for i in {1..30}; do
-            if mysqladmin ping \
-              -h localhost \
-              -u root \
-              -proot \
-              --protocol=tcp \
-              --silent; then
-              echo "MySQL is up!"
-              break
-            fi
-            echo "MySQL not ready yet ($i/30)"
+          # Usamos 127.0.0.1 em vez de localhost para evitar problemas de socket Unix
+          until mysqladmin ping -h 127.0.0.1 -u root -proot --silent; do
+            echo "MySQL not ready yet..."
             sleep 2
           done
+          echo "MySQL is up!"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
