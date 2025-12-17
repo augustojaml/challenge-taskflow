@@ -22,14 +22,11 @@ jobs:
           node-version: 20
           cache: pnpm
       
-      - name: Enable Corepack
-        run: npx corepack enable
-
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Lint
-        run: pnpm lint
+        run: npm run lint
 
       - name: Test (unit + e2e + components)
-        run: pnpm test
+        run: npm run test
