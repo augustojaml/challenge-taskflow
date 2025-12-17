@@ -38,18 +38,18 @@ const TablePagination = ({
   return (
     <div className="mt-2 flex flex-col gap-3 rounded-xl border px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
       {/* Info */}
-      <span className="text-muted-foreground text-xs">
-        mostrando{' '}
+      <span className="text-muted-foreground hidden text-xs sm:block">
+        <span>mostrando </span>
         <span className="text-foreground font-medium">
           {firstIndex}–{lastIndex}
         </span>{' '}
         de <span className="text-foreground font-medium">{total}</span> itens
       </span>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 md:justify-start">
         {/* Rows per page */}
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground text-xs">
+          <span className="text-muted-foreground hidden text-xs sm:block">
             linhas por página
           </span>
 

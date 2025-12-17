@@ -38,12 +38,12 @@ const TaskSearch = ({ onChange }: TaskSearchProps) => {
           placeholder="Pesquisar tarefa"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-10 w-fit"
+          className="h-10 w-full md:w-fit"
         />
 
         <div className="h-12 space-y-1.5 md:h-auto">
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="h-10!">
+            <SelectTrigger className="h-10! w-full md:w-fit">
               <SelectValue placeholder="Selecione o status" />
             </SelectTrigger>
             <SelectContent>

@@ -16,8 +16,7 @@ const TaskHeader = ({ hasData, onOpen }: TaskTableHeaderProps) => {
         </h2>
 
         <p className="text-muted-foreground text-xs">
-          Gerencie seu trabalho, acompanhe prioridades e avance com suas
-          atividades.
+          Gerencie seu trabalho, acompanhe prioridades.
         </p>
       </div>
 
@@ -27,7 +26,7 @@ const TaskHeader = ({ hasData, onOpen }: TaskTableHeaderProps) => {
         onClick={onOpen}
         disabled={!hasData}
       >
-        Create Task
+        <span>Create Task</span>
       </ButtonWithLoading>
     </div>
   )
