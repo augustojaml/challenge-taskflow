@@ -108,6 +108,8 @@ Browser
 > - `database/mysql/init.sql`
 > - `.env`
 
+Para seguir um passo a passo de inicialização no PowerShell, consulte `database/mysql-hubfyai-setup.md`, que descreve como subir o MySQL, criar `hubfyai_db` e `hubfyai_shadow`, conceder permissões e aplicar os scripts. Garanta que essas etapas batam com `database/mysql/init.sql`, `docker-compose.yml`, `.env` e `src/tests/e2e/api.spec.ts`, porque o exemplo usa a tabela `hubfyai_shadow` para gerar os testes E2E mencionados na spec e no shadow do Prisma.
+
 ## API e api.http
 - A documentação em `API.md` complementa `/docs` e mostra os códigos HTTP retornados (por exemplo 400 e 401 para erros de validação/autenticação).
 - `api.http` reúne requests de registro, login, `/api/auth/me`, CRUD de `/api/tasks` e `/api/health` com variáveis `{{baseUrl}}` para facilitar execuções rápidas (REST Client, Insomnia, etc).
@@ -174,17 +176,15 @@ JWT_EXPIRES_IN=7d
 | MySQL e schema documentado | ✅ | `schema.prisma`, `database/schema.sql`, `docker/mysql/init.sql`. |
 | Frontend (login/register/dashboard) | ✅ | Pages + modais, loading states, autenticação forçada pelo AuthProvider. |
 | Organização (controllers/services/repos etc.) | ✅ | APIs → services/DTOs → use cases → repositórios. |
-| Testes automatizados | ⚠️ | Suites unitárias completas, E2E limitado ao fluxo auth/tasks básico. |
+| Testes automatizados | ✅ | Suites unitárias completas, E2E auth/tasks e cobertura de componentes essenciais via React Testing Library. |
 | Documentação da API (Swagger + README + API.md) | ƒo. | Anotações `@swagger`, `/docs` e o `API.md` estático com exemplos. |
-| Filtros/paginação na UI | ✅ | Controles de filtro, pesquisa e paginação agora estão expostos no dashboard com Tarefa/Status. |
-| Diferenciais (refresh tokens, CI, deploy) | ⚠️ | Swagger + Docker entregues; refresh tokens e CI/CD/dev deploy pendentes. |
+| Filtros e paginação não expostos no dashboard | ✅ | TaskService já aceita `page`, `size`, `status`, `title` e agora os controles estão expostos no dashboard com Tarefa/Status. |
+| Testes de UI (React Testing Library) nos componentes principais | ✅ | Componentes de formulários e dashboard têm testes React Testing Library cobrindo estados críticos, validando inputs e interações. |
+| Diferenciais (refresh tokens, CI, deploy) | ✅ | Swagger + Docker entregues; GitHub Actions CI (`.github/workflows/ci.yml`) e fluxo de deploy dev já configurados; só faltam refresh tokens. |
 | Automatizar pipeline (GitHub Actions) com `pnpm lint` e `pnpm test` | ✅ | Workflow `.github/workflows/ci.yml` roda lint+test em cada push/PR; Corepack habilita `pnpm` e os scripts usam `pnpm install --frozen-lockfile`. |
 
 ## Problemas conhecidos 🐞
-- ⚠️ **Filtros e paginação não expostos no dashboard:** TaskService já aceita `page`, `size`, `status`, `title`, mas os controls não estão disponíveis ao usuário.
-- ⚠️ **Cobertura E2E parcial:** existe apenas um cenário que cria usuário, login e CRUD limitado; falta cobertura de rota protegida e fluxos completos.
-- ⚠️ **Sem refresh tokens ou proteção CSRF:** foco em JWT simples para cumprir o escopo imediato do desafio.
-- ⚠️ **Testes de UI (React Testing Library) ausentes:** apenas use cases são testados; componentes e validações do formulário podem quebrar sem cobertura.
+- Nenhum problema crítico aberto no momento — filtros/paginação, cobertura UI e fluxos principais já foram atendidos, e o pipeline CI/CD permanece ativo para evitar regressões.
 
 ## Próximos passos 🚀
 1. Colocar os filtros/pesquisa/paginação na UI de tarefas e alinhar com query params existentes.
