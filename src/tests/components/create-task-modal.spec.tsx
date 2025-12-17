@@ -15,7 +15,7 @@ vi.mock('@/features/task/hooks/mutations/update-task-mutation', () => ({
   useUpdateMutation,
 }))
 
-describe('CreateTaskModal', () => {
+describe('CREATE TASK MODAL', () => {
   const createMutateMock = vi.fn()
   const updateMutateMock = vi.fn()
   const onClose = vi.fn()

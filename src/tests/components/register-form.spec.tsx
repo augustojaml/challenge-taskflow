@@ -45,7 +45,7 @@ describe('REGISTER FORM', () => {
     render(<RegisterForm />)
   })
 
-  it('Should be able to render main register texts', () => {
+  it('should be able to render main register texts', () => {
     const [cardTitle] = screen.getAllByText('Criar conta')
     expect(cardTitle).toBeInTheDocument()
 
@@ -56,7 +56,7 @@ describe('REGISTER FORM', () => {
     ).toBeInTheDocument()
   })
 
-  it('Should be able to type name, email and password', () => {
+  it('should be able to type name, email and password', () => {
     const nameInput = screen.getByLabelText('Usuário') as HTMLInputElement
     const emailInput = screen.getByLabelText('Email') as HTMLInputElement
     const passwordInput = screen.getByLabelText('Senha') as HTMLInputElement
@@ -78,7 +78,7 @@ describe('REGISTER FORM', () => {
     expect(passwordInput.value).toBe('12345678')
   })
 
-  it('Should be able to register with valid data', async () => {
+  it('should be able to register with valid data', async () => {
     mutateAsyncMock.mockResolvedValueOnce({
       message: 'Usuário criado com sucesso',
     })
@@ -106,7 +106,7 @@ describe('REGISTER FORM', () => {
     })
   })
 
-  it('Should not be able to submit form with empty fields', async () => {
+  it('should not be able to submit form with empty fields', async () => {
     fireEvent.click(screen.getByRole('button', { name: /criar conta/i }))
 
     await waitFor(() => {
@@ -114,7 +114,7 @@ describe('REGISTER FORM', () => {
     })
   })
 
-  it('Should disable submit button when loading', () => {
+  it('should disable submit button when loading', () => {
     cleanup()
     mutateAsyncMock = vi.fn()
     vi.mocked(useRegisterMutation).mockReturnValue({
@@ -134,7 +134,7 @@ describe('REGISTER FORM', () => {
     expect(button).toBeDisabled()
   })
 
-  it('Should render link to login page', () => {
+  it('should render link to login page', () => {
     const link = screen.getByRole('link', {
       name: /já tenho uma conta/i,
     })

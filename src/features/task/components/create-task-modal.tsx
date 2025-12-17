@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { DialogDescription } from '@radix-ui/react-dialog'
 import { useCallback, useEffect, useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -101,7 +102,8 @@ export function CreateTaskModal({
         }}
       >
         <DialogHeader>
-          <DialogTitle>Criar nova tarefa</DialogTitle>
+          <DialogTitle className="sr-only">Criar nova tarefa</DialogTitle>
+          <DialogDescription>Criar nova tarefa</DialogDescription>
         </DialogHeader>
 
         <form key={formKey} className="space-y-6">
