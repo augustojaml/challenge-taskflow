@@ -27,10 +27,10 @@ export default defineConfig({
   ],
 
   test: {
-    name: 'unit',
-    environment: 'node',
+    name: 'components',
+    environment: 'jsdom',
     globals: true,
-    include: ['src/tests/unit/**/*.spec.ts'],
+    include: ['src/tests/components/**/*.spec.{ts,tsx}'],
     setupFiles: './vitest.setup.ts',
   },
 })

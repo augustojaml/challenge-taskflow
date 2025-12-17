@@ -28,6 +28,10 @@
       {
         "name": "next"
       }
+    ],
+    "types": [
+      "@testing-library/jest-dom",
+      "node"
     ]
   },
   "include": [
@@ -37,8 +41,7 @@
     "**/*.mts",
     "**/*.ts",
     "**/*.tsx",
-    "vitest.setupts",
-    ".next/dev/dev/types/**/*.ts"
+    "vitest.setupts"
   ],
   "exclude": [
     "node_modules"

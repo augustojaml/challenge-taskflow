@@ -16,6 +16,13 @@ export default defineConfig({
     }),
     swc.vite({
       module: { type: 'es6' },
+      jsc: {
+        transform: {
+          react: {
+            runtime: 'automatic',
+          },
+        },
+      },
     }),
   ],
 
@@ -24,7 +31,8 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     include: ['src/tests/e2e/**/*.spec.ts'],
-    hookTimeout: 60000, // 60 segundos para hooks (beforeAll, afterAll, etc)
-    testTimeout: 30000, // 30 segundos para testes individuais
+    hookTimeout: 60000,
+    testTimeout: 30000,
+    setupFiles: './vitest.setup.ts',
   },
 })
