@@ -170,7 +170,7 @@ JWT_EXPIRES_IN=7d
 | Organização (controllers/services/repos etc.) | ✅ | APIs → services/DTOs → use cases → repositórios. |
 | Testes automatizados | ⚠️ | Suites unitárias completas, E2E limitado ao fluxo auth/tasks básico. |
 | Documentação da API (Swagger + README + API.md) | ƒo. | Anotações `@swagger`, `/docs` e o `API.md` estático com exemplos. |
-| Filtros/paginação na UI | ⚠️ | Backend suporta, mas UI ainda não expõe controles visíveis/pesquisa. |
+| Filtros/paginação na UI | ✅ | Controles de filtro, pesquisa e paginação agora estão expostos no dashboard com Tarefa/Status. |
 | Diferenciais (refresh tokens, CI, deploy) | ⚠️ | Swagger + Docker entregues; refresh tokens e CI/CD/dev deploy pendentes. |
 
 ## Problemas conhecidos 🐞
