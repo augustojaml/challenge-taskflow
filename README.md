@@ -100,6 +100,13 @@ Browser
 | `pnpm db:migrate` | Cria/atualiza migrations e aplica no banco (modo dev para gerar novos scripts). |
 | `pnpm db:studio` | Inicia o Prisma Studio para inspeção visual dos dados localmente. |
 
+## Acessos locais
+| Recurso | URL | Observações |
+| --- | --- | --- |
+| Swagger UI (docs) | `http://localhost:3000/docs` | Documentação em tempo real gerada por `swagger-jsdoc` com todos os endpoints autenticados e públicos. |
+| API Routes | `http://localhost:3000/api` | Ponto de entrada para rotas como `/api/auth`, `/api/tasks`, `/api/health` + `swagger` e `docs`. |
+| Aplicação UI | `http://localhost:3000` | Dashboard, autenticação e todos os componentes Next.js carregados via App Router. |
+
 ## Docker, banco e testes E2E
 1. `docker-compose.yml` orquestra o MySQL 8, monta volumes e aplica o script `database/mysql/init.sql`.
 2. O Prisma client (`src/shared/databases/prisma/index.ts`) aponta para `hubfyai` e o banco shadow `hubfyai_shadow`, que é usado durante os testes (confirme as credenciais antes de subir o container).
