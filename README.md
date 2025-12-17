@@ -101,6 +101,12 @@ Browser
 2. O Prisma client (`src/shared/databases/prisma/index.ts`) aponta para `hubfyai` e o banco shadow `hubfyai_shadow`, que é usado durante os testes (confirme as credenciais antes de subir o container).
 3. Os testes E2E (`src/tests/e2e/api.spec.ts`) rodam contra o Next.js completo e exigem `pnpm build` antes de `pnpm test:e2e`, pois carregam o servidor via Supertest.
 4. Antes de subir os containers, valide se os hosts/usuários descritos em `docker-compose.yml`, `database/mysql/init.sql`, `src/shared/databases/prisma/index.ts` e `src/tests/e2e/api.spec.ts` estão sincronizados (inclusive o database `hubfyai_shadow` usado pelos testes).
+> **Importante:** verifique também os arquivos abaixo para garantir que *usuário* e *senha* batem e estão consistentes em todos os lugares (`.env` incluído):
+> - `docker-compose.yml`
+> - `src/tests/e2e/api.spec.ts`
+> - `src/shared/databases/prisma/index.ts`
+> - `database/mysql/init.sql`
+> - `.env`
 
 ## API e api.http
 - A documentação em `API.md` complementa `/docs` e mostra os códigos HTTP retornados (por exemplo 400 e 401 para erros de validação/autenticação).
