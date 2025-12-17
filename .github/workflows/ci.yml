@@ -15,7 +15,8 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: hubfyai_shadow
+          # O container cria apenas um banco automaticamente, o outro criaremos via comando
+          MYSQL_DATABASE: hubfyai_db
           MYSQL_ROOT_HOST: "%"
         ports:
           - 3306:3306
@@ -24,18 +25,16 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
-        # Se o seu arquivo SQL de init estiver no repo, descomente a linha abaixo:
-        # volumes:
-        #   - ${{ github.workspace }}/caminho/do/seu/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     env:
-      # Usando 127.0.0.1 para garantir conexão TCP
-      DATABASE_URL: mysql://root:root@127.0.0.1:3306/hubfyai_shadow
+      # Configurações de Banco para o Prisma e a Aplicação
+      DATABASE_URL: mysql://root:root@127.0.0.1:3306/hubfyai_db
+      SHADOW_DATABASE_URL: mysql://root:root@127.0.0.1:3306/hubfyai_shadow
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: root
-      DB_NAME: hubfyai_shadow
+      DB_NAME: hubfyai_db
       NODE_ENV: test
       JWT_SECRET: test-secret-key
       JWT_EXPIRES_IN: 7d
@@ -60,18 +59,19 @@ jobs:
 
       - name: Wait for MySQL
         run: |
-          echo "Waiting for MySQL to be ready..."
-          # Tentativas de conexão usando o cliente instalado
-          for i in {1..30}; do
-            if mysqladmin ping -h 127.0.0.1 -u root -proot --silent; then
-              echo "MySQL is up and running!"
-              exit 0
-            fi
-            echo "MySQL not ready yet ($i/30)..."
-            sleep 2
+          echo "Waiting for MySQL..."
+          until mysqladmin ping -h 127.0.0.1 -u root -proot --silent; do
+            echo "MySQL not ready yet..."
+            sleep 3
           done
-          echo "MySQL failed to start"
-          exit 1
+          echo "MySQL is up!"
+
+      - name: Setup Databases (Main and Shadow)
+        run: |
+          # Garante que ambos os bancos existam antes do Prisma rodar
+          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS hubfyai_db;"
+          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS hubfyai_shadow;"
+          echo "Databases created successfully!"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
