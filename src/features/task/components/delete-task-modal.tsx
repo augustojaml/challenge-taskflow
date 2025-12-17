@@ -59,14 +59,14 @@ const DeleteTaskModal = ({
                   Atenção: esta tarefa será excluída permanentemente
                 </p>
 
-                <p className="text-muted-foreground truncate">
+                <p className="text-muted-foreground break-words whitespace-pre-wrap">
                   <span className="text-foreground/80 font-medium">
                     Título:
                   </span>{' '}
                   {task?.title ?? 'Tarefa sem título'}
                 </p>
 
-                <p className="text-muted-foreground truncate">
+                <p className="text-muted-foreground break-words whitespace-pre-wrap">
                   <span className="text-foreground/80 font-medium">
                     Descrição:
                   </span>{' '}

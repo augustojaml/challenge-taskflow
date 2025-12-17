@@ -3,6 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MailIcon, ShieldCheckIcon, UserIcon, UserPlus } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -34,6 +36,21 @@ const RegisterForm = () => {
   })
 
   const registerUser = useRegisterMutation()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!registerUser.isSuccess) {
+      return undefined
+    }
+
+    const timeout = setTimeout(() => {
+      router.push('/auth/login')
+    }, 1200)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [registerUser.isSuccess, router])
 
   const onSubmit = handleSubmit(async (data: RegisterUserSchema) => {
     await registerUser.mutateAsync(data)

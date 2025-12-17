@@ -1,0 +1,63 @@
+@baseUrl = http://localhost:3000
+
+### Register a new user
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "SenhaForte123"
+}
+
+### Login to receive a token
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao@example.com",
+  "password": "SenhaForte123"
+}
+
+### Get current user (use token from login)
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer <token>
+x-user-id: <user-id>
+x-user-email: joao@example.com
+
+### List tasks (paginated)
+GET {{baseUrl}}/api/tasks?page=1&size=10
+Authorization: Bearer <token>
+x-user-id: <user-id>
+x-user-email: joao@example.com
+
+### Create a task
+POST {{baseUrl}}/api/tasks
+Authorization: Bearer <token>
+x-user-id: <user-id>
+Content-Type: application/json
+
+{
+  "title": "Nova tarefa",
+  "description": "Detalhes da tarefa",
+  "status": "PENDING"
+}
+
+### Update a task
+PUT {{baseUrl}}/api/tasks/<task-id>
+Authorization: Bearer <token>
+x-user-id: <user-id>
+Content-Type: application/json
+
+{
+  "title": "Título atualizado",
+  "status": "IN_PROGRESS"
+}
+
+### Delete a task
+DELETE {{baseUrl}}/api/tasks/<task-id>
+Authorization: Bearer <token>
+x-user-id: <user-id>
+
+### Health check
+GET {{baseUrl}}/api/health

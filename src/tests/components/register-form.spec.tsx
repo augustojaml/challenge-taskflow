@@ -19,6 +19,14 @@ vi.mock('@/features/auth/hooks/mutations/regiter-user-mutation', () => ({
   useRegisterMutation,
 }))
 
+const pushMock = vi.fn()
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: pushMock,
+  }),
+}))
+
 vi.mock('@/shared/providers/toast-provider', () => ({
   useToast: () => ({
     showToast: vi.fn(),
@@ -41,6 +49,7 @@ describe('REGISTER FORM', () => {
       error: null,
       data: null,
     })
+    pushMock.mockClear()
 
     render(<RegisterForm />)
   })
@@ -104,6 +113,25 @@ describe('REGISTER FORM', () => {
         password: '12345678',
       })
     })
+  })
+
+  it('should redirect to login after successful registration', () => {
+    vi.useFakeTimers()
+    cleanup()
+    mutateAsyncMock = vi.fn()
+    vi.mocked(useRegisterMutation).mockReturnValue({
+      mutateAsync: mutateAsyncMock,
+      isPending: false,
+      isSuccess: true,
+      error: null,
+      data: { message: 'Usuário criado com sucesso' },
+    })
+
+    render(<RegisterForm />)
+
+    vi.advanceTimersByTime(1200)
+    expect(pushMock).toHaveBeenCalledWith('/auth/login')
+    vi.useRealTimers()
   })
 
   it('should not be able to submit form with empty fields', async () => {
