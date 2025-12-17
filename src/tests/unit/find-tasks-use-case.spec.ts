@@ -31,8 +31,6 @@ describe('FIND TASKS USE CASE', () => {
       userId: user.id,
     })
 
-    console.log(result)
-
     expect(result.items).toHaveLength(3)
 
     expect(result).toMatchObject({
