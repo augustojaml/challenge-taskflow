@@ -2,15 +2,12 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   test:
-    name: Lint & Test
     runs-on: ubuntu-latest
 
     services:
@@ -23,31 +20,28 @@ jobs:
           - 3306:3306
         options: >-
           --default-authentication-plugin=mysql_native_password
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot --silent"
+          --health-cmd="mysqladmin ping -h localhost -u root -proot --protocol=tcp --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
-          --health-start-period=30s
 
     env:
+      DATABASE_URL: mysql://root:root@localhost:3306/hubfyai_shadow
       DB_HOST: localhost
       DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: root
       DB_NAME: hubfyai_shadow
-      DATABASE_URL: mysql://root:root@localhost:3306/hubfyai_shadow
-      JWT_SECRET: test-secret-key
-      JWT_EXPIRES_IN: 7d
       NODE_ENV: test
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Enable Corepack
         run: corepack enable
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -55,16 +49,20 @@ jobs:
 
       - name: Wait for MySQL
         run: |
+          echo "Waiting for MySQL..."
           for i in {1..30}; do
-            if mysql -h localhost -P 3306 -u root -proot -e "SELECT 1" >/dev/null 2>&1; then
-              echo "MySQL is ready!"
-              exit 0
+            if mysqladmin ping \
+              -h localhost \
+              -u root \
+              -proot \
+              --protocol=tcp \
+              --silent; then
+              echo "MySQL is up!"
+              break
             fi
-            echo "Attempt $i: MySQL is not ready yet..."
+            echo "MySQL not ready yet ($i/30)"
             sleep 2
           done
-          echo "MySQL failed to start"
-          exit 1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -78,5 +76,5 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Run tests
+      - name: Test
         run: pnpm test
