@@ -1,475 +1,163 @@
-# 🚀 Desafio Técnico Full Stack - Desenvolvedor React/Next.js
-
-## Sobre o Desafio
-
-Bem-vindo ao desafio técnico da **Hubfy.ai**! Este é um desafio **full stack completo** que avaliará suas habilidades em desenvolvimento frontend, backend, banco de dados, autenticação, testes e documentação. Você irá construir **do zero** um sistema de gestão de tarefas que demonstrará seu domínio das tecnologias que utilizamos no dia a dia.
-
-## Objetivo
-
-Desenvolver uma aplicação web full stack para gerenciamento de tarefas, construindo **toda a infraestrutura do zero**, incluindo:
-
-- **Frontend**: Interface moderna e responsiva com React/Next.js
-- **Backend**: API RESTful completa criada por você
-- **Banco de Dados**: Modelagem e implementação em MySQL
-- **Autenticação**: Sistema completo de login e registro com JWT
-- **Testes**: Cobertura de testes automatizados
-- **Documentação**: Documentação completa da aplicação e da API
-
-## Requisitos Técnicos Obrigatórios
-
-### Stack Tecnológico
-
-Sua solução **deve** utilizar as seguintes tecnologias:
-
-- **Next.js** (versão 14 ou superior)
-- **React** (versão 18 ou superior)
-- **TypeScript**
-- **Tailwind CSS**
-- **MySQL** (versão 8 ou superior)
-- **JWT** para autenticação
-
-### Funcionalidades Principais
-
-#### 1. Backend - API RESTful (Você deve criar do zero)
-
-Você deve construir uma API REST completa usando **Next.js API Routes** com os seguintes endpoints:
-
-**Autenticação:**
-- `POST /api/auth/register` - Registro de novos usuários
-  - Recebe: `{ name, email, password }`
-  - Retorna: `{ message, user: { id, name, email } }`
-  - Valida email único e senha forte
-
-- `POST /api/auth/login` - Login de usuários
-  - Recebe: `{ email, password }`
-  - Retorna: `{ token, user: { id, name, email } }`
-  - Retorna JWT token válido
-
-**Tarefas (protegidas por autenticação):**
-- `GET /api/tasks` - Listar todas as tarefas do usuário autenticado
-  - Header: `Authorization: Bearer {token}`
-  - Retorna: `{ tasks: [...] }`
-
-- `POST /api/tasks` - Criar uma nova tarefa
-  - Header: `Authorization: Bearer {token}`
-  - Recebe: `{ title, description, status }`
-  - Retorna: `{ task: {...} }`
-
-- `PUT /api/tasks/[id]` - Atualizar uma tarefa existente
-  - Header: `Authorization: Bearer {token}`
-  - Recebe: `{ title?, description?, status? }`
-  - Retorna: `{ task: {...} }`
-
-- `DELETE /api/tasks/[id]` - Deletar uma tarefa
-  - Header: `Authorization: Bearer {token}`
-  - Retorna: `{ message }`
-
-**Requisitos da API:**
-- Todas as rotas de tarefas devem validar o token JWT
-- Usuários só podem acessar suas próprias tarefas
-- Validação de dados de entrada em todos os endpoints
-- Tratamento adequado de erros com códigos HTTP corretos
-- Respostas padronizadas em JSON
-
-#### 2. Banco de Dados MySQL
-
-Crie um banco de dados MySQL com as seguintes tabelas:
-
-**Tabela `users`:**
-```sql
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-**Tabela `tasks`:**
-```sql
-CREATE TABLE tasks (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  status ENUM('pending', 'in_progress', 'completed') DEFAULT 'pending',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-```
-
-**Requisitos do Banco:**
-- Forneça o arquivo `schema.sql` com os comandos de criação
-- Adicione índices apropriados para otimização
-- Garanta integridade referencial com Foreign Keys
-
-#### 3. Autenticação e Segurança
-
-**Obrigatório:**
-- Implementar autenticação JWT (Bearer Token)
-- Armazenar senhas usando hash seguro (bcrypt ou argon2)
-- Criar middleware de autenticação para proteger rotas
-- Garantir que usuários só possam acessar suas próprias tarefas
-- Utilizar variáveis de ambiente (`.env`) para credenciais sensíveis
-- Validar força da senha no registro (mínimo 8 caracteres)
-- Validar formato de email
-
-**Não permitido:**
-- Senhas em texto plano
-- SQL injection (use prepared statements ou ORM)
-- Credenciais hardcoded no código
-- Tokens sem expiração
-
-#### 4. Frontend
-
-**Páginas obrigatórias:**
-
-- **Página de Login** (`/login`)
-  - Formulário com email e senha
-  - Validação de campos em tempo real
-  - Mensagens de erro claras
-  - Redirecionamento após login bem-sucedido
-  - Link para página de registro
-
-- **Página de Registro** (`/register`)
-  - Formulário com nome, email e senha
-  - Validação de campos (email válido, senha forte)
-  - Confirmação de senha
-  - Mensagens de erro claras
-  - Redirecionamento para login após registro
-
-- **Dashboard de Tarefas** (`/dashboard`)
-  - Listagem de todas as tarefas do usuário
-  - Formulário para criar nova tarefa
-  - Opções para editar e deletar tarefas
-  - Filtro por status (pending, in_progress, completed)
-  - Indicadores de loading durante requisições
-  - Mensagens de sucesso/erro para ações
-  - Botão de logout
-  - Proteção de rota (apenas usuários autenticados)
-
-**Requisitos do Frontend:**
-- Interface responsiva (mobile, tablet, desktop)
-- Estados de loading visíveis
-- Tratamento de erros com feedback visual
-- Validação de formulários
-- Proteção de rotas (redirecionamento se não autenticado)
-
-#### 5. Testes (Obrigatório)
-
-Você **deve** implementar testes automatizados:
-
-**Testes de Backend (Obrigatório):**
-- Testes de integração para endpoints da API
-- Testar autenticação (registro, login, token inválido)
-- Testar CRUD de tarefas
-- Testar isolamento de dados entre usuários
-- Usar Jest + Supertest ou similar
-
-**Testes de Frontend (Diferencial):**
-- Testes de componentes com React Testing Library
-- Testar formulários e validações
-- Testar fluxos de autenticação
-
-**Cobertura mínima esperada:** 60% dos endpoints da API
-
-#### 6. Documentação (Obrigatório)
-
-**README.md deve conter:**
-
-- Descrição do projeto
-- Tecnologias utilizadas
-- Pré-requisitos (Node.js, MySQL, etc.)
-- Instruções detalhadas de instalação
-- Como criar e configurar o banco de dados
-- Como configurar variáveis de ambiente
-- Como rodar o projeto localmente
-- Como rodar os testes
-- Estrutura de pastas do projeto
-- Decisões técnicas importantes
-- Melhorias futuras
-
-**API.md deve conter:**
-
-Documentação completa de todos os endpoints:
-- URL e método HTTP
-- Descrição do endpoint
-- Headers necessários
-- Parâmetros (query, path, body)
-- Exemplo de requisição (curl ou JSON)
-- Exemplo de resposta (sucesso e erro)
-- Códigos de status HTTP possíveis
-
-**Exemplo de documentação de endpoint:**
-```markdown
-### POST /api/auth/login
-
-Autentica um usuário e retorna um token JWT.
-
-**Headers:**
-- Content-Type: application/json
-
-**Body:**
-{
-  "email": "usuario@exemplo.com",
-  "password": "senha123"
-}
-
-**Resposta de Sucesso (200):**
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": 1,
-    "name": "João Silva",
-    "email": "usuario@exemplo.com"
-  }
-}
-
-**Resposta de Erro (401):**
-{
-  "error": "Email ou senha inválidos"
-}
-```
-
-## Diferenciais
-
-Os seguintes itens não são obrigatórios, mas serão considerados diferenciais na avaliação:
-
-### Arquitetura e Qualidade
-
-- Utilização de **ORM** (Prisma ou Drizzle) para interagir com o banco de dados
-- Validação de entrada com **Zod** em todos os endpoints
-- Uso de **React Hook Form** para formulários
-- Gerenciamento de estado com **TanStack Query** ou Context API
-- Arquitetura em camadas (controllers, services, repositories)
-- Padrões de design aplicados
-- TypeScript rigoroso (evitando `any`)
-
-### Funcionalidades Extras
-
-- Sistema de **refresh token**
-- **Paginação** na listagem de tarefas
-- **Busca e filtros** avançados
-- **Ordenação** de tarefas (por data, status, etc.)
-- **Dark/Light Mode** com persistência
-- **Testes E2E** com Playwright ou Cypress
-- Cobertura de testes acima de 80%
-
-### DevOps e Documentação
-
-- Arquivo `docker-compose.yml` para orquestrar banco de dados e aplicação
-- Documentação interativa da API com **Swagger/OpenAPI**
-- Scripts de migração do banco de dados
-- CI/CD com GitHub Actions
-- Deploy da aplicação (Vercel, Railway, Render, etc.)
-
-## Critérios de Avaliação
-
-Sua solução será avaliada com base nos seguintes critérios:
-
-| Critério | Descrição | Peso |
-|----------|-----------|------|
-| **Funcionalidade** | A aplicação atende todos os requisitos obrigatórios? | Alto |
-| **Backend/API** | A API está bem estruturada e segue boas práticas REST? | Alto |
-| **Segurança** | Implementação correta de autenticação e proteção de dados? | Alto |
-| **Testes** | Possui testes automatizados com boa cobertura? | Alto |
-| **Banco de Dados** | Schema bem projetado e queries otimizadas? | Médio |
-| **Qualidade do Código** | Código limpo, organizado e manutenível? | Alto |
-| **Frontend/UX** | Interface intuitiva e responsiva? | Médio |
-| **Documentação** | Documentação clara e completa? | Alto |
-| **Diferenciais** | Implementou funcionalidades extras? | Baixo |
-
-## Instruções de Entrega
-
-### 1. Desenvolvimento
-
-- Crie um **novo repositório público** no GitHub ou GitLab
-- Desenvolva a solução seguindo os requisitos
-- Faça commits frequentes e com mensagens descritivas (conventional commits)
-- Mantenha um histórico de commits limpo e organizado
-
-### 2. Estrutura do Repositório
-
-Seu repositório **deve** conter:
+# TaskFlow 🤖✨
+
+Aplicação construída a partir do desafio descrito em `CHALLENGE.md` da Hubfy.ai, combinando Next.js App Router com API Routes, Prisma e um front focado em produtividade para o gerenciamento de tarefas.
+
+## Menu delícia 🍽️
+- Contexto do desafio
+- Arquitetura
+- Mapa do monorepo
+- Stack principal
+- Tecnologias & packages usados
+- Como rodar
+- Variáveis de ambiente
+- API & Eventos
+- Decisões e trade-offs
+- Requisitos atendidos
+- Problemas conhecidos
+- Tempo investido
+- Próximos passos
+- Tecnologias usadas
+
+## Contexto do desafio 🎯
+Construí este sistema full stack para atender ao desafio completo da Hubfy.ai: API REST com autenticação JWT, persistência em MySQL, interface em Next.js/React, testes automatizados e documentação, tudo a partir da estrutura sugerida no `CHALLENGE.md` e mantendo a lógica de negócios bem separada (use cases, repositórios e entidades).
+
+## Arquitetura 🧩
+O projeto roda dentro de um único Next.js (v16) com App Router. O front-end ocupa `app/(auth)` e `app/(dashboard)` enquanto toda a camada de domínio está organizada em `shared`/`features`. A middleware `src/proxy.ts` valida tokens, rejeita acessos não autenticados e injeta os cabeçalhos `x-user-id` / `x-user-email` necessários para os use cases do backend.
 
 ```
-projeto/
-├── src/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── auth/
-│   │   │   │   ├── login/route.ts
-│   │   │   │   └── register/route.ts
-│   │   │   └── tasks/
-│   │   │       ├── route.ts
-│   │   │       └── [id]/route.ts
-│   │   ├── login/page.tsx
-│   │   ├── register/page.tsx
-│   │   └── dashboard/page.tsx
-│   ├── components/
-│   ├── lib/
-│   │   ├── db.ts
-│   │   ├── auth.ts
-│   │   └── middleware.ts
-│   └── types/
-├── tests/
-│   ├── api/
-│   │   ├── auth.test.ts
-│   │   └── tasks.test.ts
-│   └── components/
-├── database/
-│   └── schema.sql
-├── .env.example
-├── README.md
-├── API.md
-├── package.json
-├── tsconfig.json
-└── jest.config.js (ou vitest.config.ts)
+Browser
+   │
+   ▼
+[Next.js App Router (app/)]
+   ├─ /auth/login, /auth/register → React Hook Form + Zod + AuthProvider + LocalStorage
+   ├─ / (dashboard) → TanStack Query + modais de criação/edição + tabelas responsivas
+   ├─ /api/health, /api/swagger → health check + docs geradas com swagger-jsdoc
+   └─ /api/auth/*, /api/tasks/* → API Routes com use cases (auth, tasks) + Prisma
+        │
+        └─ proxy.ts valida JWT e injeta x-user-* antes de chegar aos handlers
+             │
+             └─ Prisma Client → MySQL 8 (docker/docker-compose ou ambiente local)
 ```
 
-### 3. Arquivos Obrigatórios
+## Mapa do monorepo 🗺️
+### Apps 🎡
+| App | Tecnologia | Responsabilidade |
+| --- | --- | --- |
+| `src/app` | Next.js 16 + App Router | UI de autenticação, dashboard, documentação (`/docs`), API Routes (auth, tasks, swagger, health). |
+| `src/tests` | Vitest (unit & e2e) | Suites de unitários para use cases e um teste E2E com Supertest rodando o servidor Next completo. |
 
-- ✅ `README.md` - Documentação completa do projeto
-- ✅ `API.md` - Documentação completa da API
-- ✅ `.env.example` - Template de variáveis de ambiente
-- ✅ `database/schema.sql` - Schema do banco de dados
-- ✅ `package.json` - Dependências e scripts
-- ✅ Testes automatizados na pasta `tests/` ou `__tests__/`
+### Pacotes 🎁
+| Pacote | Conteúdo |
+| --- | --- |
+| `src/features` | Dividido em `auth` e `task`: serviços, hooks, schemas, DTOs, modais e componentes específicos. |
+| `src/shared` | Camada cross-cutting: providers (Auth, Theme, QueryClient), helpers (token, localStorage, format), libs (axios, query client), constantes, componentes UI (shadcn + custom). |
+| `src/shared/databases/prisma` | Prisma Client configurado com entidades, mappers, repositórios e fábricas para manter a Clean Architecture. |
+| `database` | `schema.sql` + `mysql/init.sql` usados por MySQL/Docker. |
+| `docker-compose.yml` | Serviço MySQL 8 com init script e volume persistente. |
 
-### 4. Envio
+## Stack principal 🛠️
+- Next.js 16 com App Router e React 19 (TypeScript + Tailwind CSS + shadcn UI)
+- Prisma Client + MySQL 8 (docker-compose + `schema.sql`)
+- Autenticação JWT com `proxy.ts`, bcryptjs e policies de domínio
+- Formularios com React Hook Form + Zod; gerenciamento de dados com TanStack Query
+- Axios com interceptors, AuthProvider + React Query cache + toasts personalizados
+- Vitest (unit e e2e) + Supertest + config separada para `unit` e `e2e`
+- Swagger gerado via `swagger-jsdoc` e servido em `/docs`
 
-Envie o **link do repositório público** para o e-mail fornecido no processo seletivo com:
+## Tecnologias & packages usados 🧰
+| Categoria | Tecnologias & packages |
+| --- | --- |
+| Monorepo | `pnpm`, `next`, `typescript`, `vitest`, `eslint`, `prettier` |
+| Frontend | `react`, `tailwindcss`, `shadcn/ui`, `@tanstack/react-query`, `react-hook-form`, `zod`, `lucide-react`, `@radix-ui`, `clsx`, `tw-animate-css` |
+| Backend | `next/api routes`, `prisma`, `mysql2`, `jsonwebtoken`, `bcryptjs`, `swagger-jsdoc`, `axios` |
+| Infra | `docker-compose`, `mysql:8`, `dotenv`, `prisma migrate`, `prisma db push` |
+| Testes | `vitest`, `@vitest/ui`, `@vitest/coverage-v8`, `supertest`, `faker`, `node:http` |
+| Utilidades | `clsx`, `tailwind-merge`, `local-storage helper`, `query-client custom`, `toast provider`, `cn utility` |
 
-- **Assunto**: `Desafio Full Stack - [Seu Nome]`
-- **Corpo do e-mail**:
-  - Link do repositório público (GitHub/GitLab)
-  - Link da aplicação em produção (se fez deploy)
-  - Instruções especiais, se houver
-  - Tempo aproximado gasto no desafio
-  - Comentários sobre decisões técnicas importantes
+## Como rodar ▶️
+1. **Pré-requisitos**: Node.js >= 20, pnpm, Docker Desktop (para MySQL). Copie `.env.example` para `.env` e configure as credenciais.
+2. **Banco de dados local** (recomendado): `docker compose up -d` (usa `database/mysql/init.sql` para criar bancos/users). Alternativamente use MySQL externo e atualize `DATABASE_URL`.
+3. **Instale dependências**: `pnpm install`.
+4. **Prepare Prisma**: `pnpm db:generate` seguido de `pnpm db:push` (migrations opcionais, use `pnpm db:migrate` para gerar).
+5. **Rodar em dev**: `pnpm dev` → UI em `http://localhost:3000`, API em `/api`, docs interativas em `/docs`.
+6. **Testes**: `pnpm test` (build + vitest). Também disponíveis `pnpm test:unit`, `pnpm test:e2e`, `pnpm test:coverage`.
+7. **Lint/fmt**: `pnpm lint` / `pnpm lint:fix`.
 
-**Importante:** O repositório deve ser **público** e acessível sem necessidade de permissões.
+## Variáveis de ambiente 🌦️
+O `.env.example` lista as variáveis necessárias. Use valores reais no `.env`.
 
-## Prazo
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=hubfyai
+DB_PASSWORD=hubfyai
+DB_NAME=hubfyai_db
 
-Você terá **10 dias corridos** a partir do recebimento deste desafio para enviar sua solução.
+DATABASE_URL="mysql://hubfyai:hubfyai@localhost:3306/hubfyai_db"
+SHADOW_DATABASE_URL="mysql://root:root@localhost:3306/hubfyai_shadow"
 
-## Dúvidas
+JWT_SECRET=uma-chave-com-pelo-menos-32-caracteres
+JWT_EXPIRES_IN=7d
+```
 
-Caso tenha dúvidas sobre o desafio, entre em contato através do e-mail fornecido no processo seletivo.
+## API & eventos 🔌
+| Método | Rota | Descrição | Autenticação | Observações |
+| --- | --- | --- | --- | --- |
+| `POST` | `/api/auth/register` | Registro com validação Zod e hash bcrypt | Pública | Retorna `message` + `user` |
+| `POST` | `/api/auth/login` | Valida credenciais e gera JWT (`tokenJWT.generateToken`) | Pública | Responde `token` + `user` |
+| `GET` | `/api/auth/me` | Retorna dados do usuário a partir do `x-user-id` injetado pelo proxy | Bearer | Use `AuthProvider` para cache via `useQuery` |
+| `POST` | `/api/auth/logout` | Endpoint dummy que valida token e responde mensagem | Bearer | Tratamento via Axios interceptors |
+| `GET` | `/api/tasks` | Lista paginada + filtros (status, título) para o usuário autenticado | Bearer | Query params: `page`, `size`, `title`, `status` |
+| `POST` | `/api/tasks` | Cria tarefa com DTO/Zod | Bearer | Usa `createTaskSchema` + task factory |
+| `PUT` | `/api/tasks/:id` | Atualiza task com `taskFactory.updateTask()` | Bearer | `x-user-id` garante isolamento |
+| `DELETE` | `/api/tasks/:id` | Remove tarefa (cascade implícita) | Bearer | Retorna `message` |
+| `GET` | `/api/health` | Health check simples para readiness | Pública | |
+| `GET` | `/api/swagger` + `/docs` | Swagger UI baseado em `swagger-jsdoc` anotado nas rotas | Pública | Docs interativas com todos os endpoints |
 
-## Exemplo de Fluxo da Aplicação
+**Eventos**: aplicação síncrona apenas (HTTP). Não há broker/filas/WebSocket neste MVP.
 
-1. Usuário acessa `/register` e cria uma conta
-2. Sistema valida dados e armazena usuário no banco com senha hasheada
-3. Usuário é redirecionado para `/login`
-4. Após login, sistema valida credenciais e retorna JWT token
-5. Token é armazenado no cliente (localStorage, cookie ou state)
-6. Usuário acessa `/dashboard` (rota protegida)
-7. Frontend faz requisição para `GET /api/tasks` com token no header `Authorization`
-8. Backend valida token, extrai user_id e retorna apenas tarefas daquele usuário
-9. Usuário pode criar, editar e deletar suas tarefas
-10. Todas as ações passam por validação e autenticação
+## Decisões e trade-offs 🧠
+- **Clean Architecture:** API Routes apenas disparam factories que chamam use cases → repositórios Prisma e entidades. Facilita testes unitários e reuso.
+- **Proxy `src/proxy.ts`:** valida o JWT antes de cada requisição (exceto `/auth/*`, `/docs`, `/api/swagger`, `/api/health`) e injeta `x-user-id`. Isso evita repetição de lógica em cada handler.
+- **AuthProvider + React Query:** mantém token no `localStorage`, usa `useGetMe` para cache e limpa cache + token no logout. Trade-off: token em LocalStorage (não HttpOnly) e sem refresh tokens aborda o desafio de forma prática.
+- **Forms:** React Hook Form + Zod garantem validação conforme schemas do backend, compartilhando regras (ex.: email válido, senha >= 8 caracteres).
+- **TanStack Query:** dados de tarefas são cacheados, invalidados após mutações e não refetcham no foco (configuração customizada).
+- **Sem microsserviços por ora:** toda a API vive no mesmo monorepo Next.js. Evita configuração extra, mas limita escala horizontal até se separar.
 
-## Boas Práticas Esperadas
+## Requisitos atendidos ✅
+| Requisito | Status | Detalhes |
+| --- | --- | --- |
+| Autenticação JWT (registro/login/me/logout) | ✅ | Use cases com `bcryptjs` + `tokenJWT`, `proxy.ts` protege rotas. |
+| CRUD de tarefas com validação e proteção | ✅ | Task factory + Prisma + DTOs + filtros básicos via query params. |
+| MySQL e schema documentado | ✅ | `schema.prisma`, `database/schema.sql`, `docker/mysql/init.sql`. |
+| Frontend (login/register/dashboard) | ✅ | Pages + modais, loading states, autenticação forçada pelo AuthProvider. |
+| Organização (controllers/services/repos etc.) | ✅ | APIs → services/DTOs → use cases → repositórios. |
+| Testes automatizados | ⚠️ | Suites unitárias completas, E2E limitado ao fluxo auth/tasks básico. |
+| Documentação da API (Swagger + README) | ✅ | Anotações `@swagger` + `/docs`. Falta `API.md` estático. |
+| Filtros/paginação na UI | ⚠️ | Backend suporta, mas UI ainda não expõe controles visíveis/pesquisa. |
+| Diferenciais (refresh tokens, CI, deploy) | ⚠️ | Swagger + Docker entregues; refresh tokens e CI/CD/dev deploy pendentes. |
 
-Durante o desenvolvimento, esperamos que você demonstre:
+## Problemas conhecidos 🐞
+- ⚠️ **Filtros e paginação não expostos no dashboard:** TaskService já aceita `page`, `size`, `status`, `title`, mas os controls não estão disponíveis ao usuário.
+- ⚠️ **Cobertura E2E parcial:** existe apenas um cenário que cria usuário, login e CRUD limitado; falta cobertura de rota protegida e fluxos completos.
+- ⚠️ **API.md não presente:** documentação interativa existe, mas o arquivo pedido ainda não foi escrito.
+- ⚠️ **Sem refresh tokens ou proteção CSRF:** foco em JWT simples para cumprir o escopo imediato do desafio.
+- ⚠️ **Testes de UI (React Testing Library) ausentes:** apenas use cases são testados; componentes e validações do formulário podem quebrar sem cobertura.
 
-**Backend:**
-- Separação de responsabilidades (routes, controllers, services)
-- Middleware de autenticação reutilizável
-- Validação de entrada de dados
-- Tratamento adequado de erros
-- Queries SQL seguras (prepared statements ou ORM)
-- Logs apropriados
-- Códigos HTTP semânticos
+## Tempo investido ⏱️
+| Atividade | Horas gastas (aproximado) |
+| --- | --- |
+| Arquitetura + backend (auth + tasks + Prisma) | 8h |
+| Frontend (layouts, modais, providers) | 4h |
+| Testes (unitários + e2e + helpers) | 4h |
+| Documentação, ajustes e docker | 2h |
+| **Total** | **18h** |
 
-**Frontend:**
-- Componentização adequada
-- Hooks customizados para lógica reutilizável
-- Gerenciamento de estado apropriado
-- Feedback visual para ações do usuário
-- Tratamento de erros
-- Loading states
-- Responsividade
+## Próximos passos 🚀
+1. Colocar os filtros/pesquisa/paginação na UI de tarefas e alinhar com query params existentes.
+2. Expandir cobertura de testes: React Testing Library (formulários/dashboard) + testes de integração para todos os endpoints (Supertest) + novos cenários E2E.
+3. Gerar `API.md` estático e adicionar badge/cobertura de API no README.
+4. Automatizar pipeline (GitHub Actions) com `pnpm lint`, `pnpm test`, e publicar em Vercel/Railway quando estiver pronto.
 
-**Geral:**
-- Commits semânticos e bem descritos
-- Código limpo e legível
-- Comentários onde necessário
-- TypeScript bem tipado
-- Testes bem estruturados
-- Documentação clara
-
-## Recursos Úteis
-
-- [Documentação do Next.js](https://nextjs.org/docs)
-- [Documentação do MySQL](https://dev.mysql.com/doc/)
-- [JWT.io](https://jwt.io/)
-- [bcrypt.js](https://www.npmjs.com/package/bcryptjs)
-- [Prisma Docs](https://www.prisma.io/docs)
-- [Drizzle ORM](https://orm.drizzle.team/)
-- [Zod Validation](https://zod.dev/)
-- [Jest Testing](https://jestjs.io/)
-- [Supertest](https://www.npmjs.com/package/supertest)
-- [React Testing Library](https://testing-library.com/react)
-
-## Dicas Importantes
-
-- **Comece pelo backend e banco de dados** antes do frontend
-- **Teste seus endpoints** com Postman ou Insomnia antes de integrar
-- **Implemente autenticação primeiro**, depois as funcionalidades
-- **Escreva testes enquanto desenvolve**, não deixe para o final
-- **Documente conforme avança**, não deixe para o final
-- **Faça commits frequentes** com mensagens claras
-- **Não commite arquivos `.env`** com credenciais reais
-- **Use o `.env.example`** para documentar variáveis necessárias
-- **Teste a aplicação do zero** seguindo seu próprio README antes de enviar
-
-## O Que NÃO Fazer
-
-- ❌ Usar APIs externas ou fake APIs (você deve criar sua própria API)
-- ❌ Copiar código de tutoriais sem entender e adaptar
-- ❌ Commitar credenciais ou tokens no repositório
-- ❌ Deixar endpoints sem autenticação
-- ❌ Armazenar senhas em texto plano
-- ❌ Ignorar tratamento de erros
-- ❌ Enviar sem testes
-- ❌ Enviar sem documentação
-- ❌ Criar repositório privado
-
-## Checklist Antes de Enviar
-
-- [ ] Todos os endpoints da API funcionam corretamente
-- [ ] Sistema de autenticação está completo e seguro
-- [ ] Senhas estão sendo hasheadas
-- [ ] Usuários só acessam suas próprias tarefas
-- [ ] Frontend está responsivo
-- [ ] Testes estão implementados e passando
-- [ ] README.md está completo com instruções claras
-- [ ] API.md documenta todos os endpoints
-- [ ] .env.example está incluído
-- [ ] schema.sql está incluído
-- [ ] Repositório é público
-- [ ] Não há credenciais commitadas
-- [ ] Testei seguindo as instruções do README do zero
-
----
-
-**Boa sorte! Estamos ansiosos para ver sua solução! 🚀**
-
-*Desenvolvido pela equipe Hubfy.ai*
-
-
----
-
-# Minhas Pendências
-
-- [ ] Test de components
-- [ ] Test de E2E
-- [ ] Implementar paginação na listagem de tarefas
-- [ ] Implementar filtro por status na listagem de tarefas
-- [ ] Implementar filtro pelo titulo na listagem de tarefas
-- [ ] Refatoração e limpeza de código
+## Tecnologias usadas 🛠️
+![Docker](https://img.shields.io/badge/docker-2496ED?style=flat&logo=docker&logoColor=white) ![Next.js](https://img.shields.io/badge/next.js-000000?style=flat&logo=next.js&logoColor=white) ![React](https://img.shields.io/badge/react-61DAFB?style=flat&logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-3178C6?style=flat&logo=typescript&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/tailwindcss-06B6D4?style=flat&logo=tailwind-css&logoColor=white) ![Prisma](https://img.shields.io/badge/prisma-2D3748?style=flat&logo=prisma&logoColor=white) ![MySQL](https://img.shields.io/badge/mysql-4479A1?style=flat&logo=mysql&logoColor=white) ![Vitest](https://img.shields.io/badge/vitest-fe4c3a?style=flat&logo=vitest&logoColor=white) ![Swagger](https://img.shields.io/badge/swagger-85EA2D?style=flat&logo=swagger&logoColor=black) ![PNPM](https://img.shields.io/badge/pnpm-F69220?style=flat&logo=pnpm&logoColor=white)
