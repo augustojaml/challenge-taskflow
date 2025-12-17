@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
       status,
     })
 
-    return NextResponse.json(result)
+    return NextResponse.json(result, { status: 201 })
   } catch (error) {
     return NextResponse.json(
       { error: error },

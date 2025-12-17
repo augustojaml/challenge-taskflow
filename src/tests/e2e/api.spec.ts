@@ -58,6 +58,13 @@ describe('API Auth E2E', () => {
         },
       },
     })
+    await prisma.task.deleteMany({
+      where: {
+        title: {
+          endsWith: 'Test Task',
+        },
+      },
+    })
   })
 
   afterAll(async () => {
@@ -108,6 +115,147 @@ describe('API Auth E2E', () => {
         email: testUser.email,
         name: testUser.name,
       },
+    })
+  })
+
+  it('should be able to create a task successfully', async () => {
+    const hashedPassword = await bcrypt.hash(testUser.password, 10)
+
+    await prisma.user.create({
+      data: {
+        email: testUser.email,
+        passwordHash: hashedPassword,
+        name: testUser.name,
+      },
+    })
+
+    const signInResponse = await agent.post('/api/auth/login').send({
+      email: testUser.email,
+      password: testUser.password,
+    })
+
+    const response = await agent
+      .post('/api/tasks')
+      .set('Authorization', `Bearer ${signInResponse.body.token}`)
+      .send({
+        title: 'Test Task',
+        description: 'Test Description',
+        status: 'PENDING',
+      })
+    expect(response.status).toBe(201)
+    expect(response.body).toMatchObject({
+      task: {
+        id: expect.any(String),
+        title: 'Test Task',
+        description: 'Test Description',
+        status: 'PENDING',
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      },
+    })
+  })
+
+  it('should be able to list all tasks successfully', async () => {
+    const hashedPassword = await bcrypt.hash(testUser.password, 10)
+
+    await prisma.user.create({
+      data: {
+        email: testUser.email,
+        passwordHash: hashedPassword,
+        name: testUser.name,
+      },
+    })
+
+    const signInResponse = await agent.post('/api/auth/login').send({
+      email: testUser.email,
+      password: testUser.password,
+    })
+
+    const response = await agent
+      .get('/api/tasks')
+      .set('Authorization', `Bearer ${signInResponse.body.token}`)
+
+    expect(response.status).toBe(200)
+    expect(response.body).toMatchObject({
+      tasks: expect.any(Array),
+    })
+  })
+  it('should be able to update a task successfully', async () => {
+    const hashedPassword = await bcrypt.hash(testUser.password, 10)
+
+    await prisma.user.create({
+      data: {
+        email: testUser.email,
+        passwordHash: hashedPassword,
+        name: testUser.name,
+      },
+    })
+    const signInResponse = await agent.post('/api/auth/login').send({
+      email: testUser.email,
+      password: testUser.password,
+    })
+
+    const responseTask = await agent
+      .post('/api/tasks')
+      .set('Authorization', `Bearer ${signInResponse.body.token}`)
+      .send({
+        title: 'Test Task',
+        description: 'Test Description',
+        status: 'PENDING',
+      })
+
+    const response = await agent
+      .put(`/api/tasks/${responseTask.body.task.id}`)
+      .set('Authorization', `Bearer ${signInResponse.body.token}`)
+      .send({
+        title: 'Updated Task',
+        description: 'Updated Description',
+        status: 'COMPLETED',
+      })
+
+    expect(response.status).toBe(200)
+    expect(response.body).toMatchObject({
+      task: {
+        id: expect.any(String),
+        title: 'Updated Task',
+        description: 'Updated Description',
+        status: 'COMPLETED',
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      },
+    })
+  })
+
+  it('should be able to delete a task successfully', async () => {
+    const hashedPassword = await bcrypt.hash(testUser.password, 10)
+
+    await prisma.user.create({
+      data: {
+        email: testUser.email,
+        passwordHash: hashedPassword,
+        name: testUser.name,
+      },
+    })
+    const signInResponse = await agent.post('/api/auth/login').send({
+      email: testUser.email,
+      password: testUser.password,
+    })
+
+    const responseTask = await agent
+      .post('/api/tasks')
+      .set('Authorization', `Bearer ${signInResponse.body.token}`)
+      .send({
+        title: 'Test Task',
+        description: 'Test Description',
+        status: 'PENDING',
+      })
+
+    const response = await agent
+      .delete(`/api/tasks/${responseTask.body.task.id}`)
+      .set('Authorization', `Bearer ${signInResponse.body.token}`)
+    expect(response.status).toBe(200)
+    expect(response.body).toMatchObject({
+      message: 'Task deleted successfully',
     })
   })
 })
