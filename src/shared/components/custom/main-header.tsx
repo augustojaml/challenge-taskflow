@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, LogOutIcon } from 'lucide-react'
+import { LogOutIcon } from 'lucide-react'
 import { useCallback } from 'react'
 
 import { getInitialsLetterName } from '@/shared/helpers'
@@ -46,10 +46,6 @@ const MainHeader = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" aria-label="Notifications">
-            <Bell className="h-4 w-4" />
-          </Button>
-
           <ButtonTheme />
 
           {isLoading ? (
