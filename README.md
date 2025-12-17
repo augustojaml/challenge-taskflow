@@ -83,6 +83,41 @@ Browser
 6. **Testes**: `pnpm test` (build + vitest). Também disponíveis `pnpm test:unit`, `pnpm test:e2e`, `pnpm test:coverage`.
 7. **Lint/fmt**: `pnpm lint` / `pnpm lint:fix`.
 
+## Scripts disponíveis
+| Script | O que faz |
+| --- | --- |
+| `pnpm dev` | Inicializa o Next.js em modo dev (`http://localhost:3000`). |
+| `pnpm build` | Compila o Next para produção e gera artefatos SWC/tsc. |
+| `pnpm start` | Executa o servidor Next já compilado. |
+| `pnpm lint` / `pnpm lint:fix` | Executa ou corrige o ESLint configurado. |
+| `pnpm test` | Roda `pnpm build` + `vitest run` em todas as suites (unit, e2e, components). |
+| `pnpm test:unit` | Suite de testes unitários com Vitest. |
+| `pnpm test:e2e` | Caso de ponta com Supertest (lembre-se: roda `pnpm build` antes de executar). |
+| `pnpm test:components` | Testes de UI (Vitest + React Testing Library). |
+| `pnpm test:coverage` | Gera cobertura com `@vitest/coverage-v8`. |
+
+## Docker, banco e testes E2E
+1. `docker-compose.yml` orquestra o MySQL 8, monta volumes e aplica o script `database/mysql/init.sql`.
+2. O Prisma client (`src/shared/databases/prisma/index.ts`) aponta para `hubfyai` e o banco shadow `hubfyai_shadow`, que é usado durante os testes (confirme as credenciais antes de subir o container).
+3. Os testes E2E (`src/tests/e2e/api.spec.ts`) rodam contra o Next.js completo e exigem `pnpm build` antes de `pnpm test:e2e`, pois carregam o servidor via Supertest.
+4. Antes de subir os containers, valide se os hosts/usuários descritos em `docker-compose.yml`, `database/mysql/init.sql`, `src/shared/databases/prisma/index.ts` e `src/tests/e2e/api.spec.ts` estão sincronizados (inclusive o database `hubfyai_shadow` usado pelos testes).
+
+## API e api.http
+- A documentação em `API.md` complementa `/docs` e mostra os códigos HTTP retornados (por exemplo 400 e 401 para erros de validação/autenticação).
+- `api.http` reúne requests de registro, login, `/api/auth/me`, CRUD de `/api/tasks` e `/api/health` com variáveis `{{baseUrl}}` para facilitar execuções rápidas (REST Client, Insomnia, etc).
+
+## Imagens / capturas
+- ![Login](imgs/task-login.png) - Tela de login.  
+- ![Cadastro](imgs/task-register.png) - Formulário de registro com validações.  
+- ![Dashboard](imgs/tasks.png) - Tabela do dashboard (filtros estão planejados).  
+- ![Criação de tarefa](imgs/tas-create.png) - Modal de criar tarefa.  
+- ![Exclusão](imgs/task-delete.png) - Modal de exclusão, texto quebrando corretamente.
+
+## Automatizar pipeline (GitHub Actions)
+1. Configure um workflow que rode `pnpm lint` e `pnpm test` em cada push/pull request.  
+2. Em commits prontos para produção, adicione etapas de `pnpm build` seguidas por deploy automático em Vercel ou Railway (use secrets `VERCEL_TOKEN`/`RAILWAY_TOKEN`).  
+3. Garanta que o pipeline valide lint → testes → build antes do deploy, conforme o fluxo descrito nos comandos acima.
+
 ## Variáveis de ambiente 🌦️
 O `.env.example` lista as variáveis necessárias. Use valores reais no `.env`.
 
