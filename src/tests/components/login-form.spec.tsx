@@ -49,7 +49,7 @@ describe('LOGIN FORM', () => {
     render(<LoginForm />)
   })
 
-  it('Should be able to render main login texts', () => {
+  it('should be able to render main login texts', () => {
     expect(screen.getByText('Acesse sua conta')).toBeInTheDocument()
 
     expect(
@@ -57,7 +57,7 @@ describe('LOGIN FORM', () => {
     ).toBeInTheDocument()
   })
 
-  it('Should be able to type email and password', () => {
+  it('should be able to type email and password', () => {
     const emailInput = screen.getByLabelText('Email') as HTMLInputElement
     const passwordInput = screen.getByLabelText('Senha') as HTMLInputElement
 
@@ -73,7 +73,7 @@ describe('LOGIN FORM', () => {
     expect(passwordInput.value).toBe('12345678')
   })
 
-  it('Should be able to login with valid credentials', async () => {
+  it('should be able to login with valid credentials', async () => {
     mutateAsyncMock.mockResolvedValueOnce({
       token: 'fake-token',
       user: {
@@ -108,7 +108,7 @@ describe('LOGIN FORM', () => {
     )
   })
 
-  it('Should redirect to home after successful login', async () => {
+  it('should redirect to home after successful login', async () => {
     const assignMock = vi.fn()
 
     Object.defineProperty(globalThis, 'location', {
@@ -136,7 +136,7 @@ describe('LOGIN FORM', () => {
     })
   })
 
-  it('Should not be able to submit form with empty fields', async () => {
+  it('should not be able to submit form with empty fields', async () => {
     fireEvent.click(screen.getByRole('button', { name: /entrar/i }))
 
     await waitFor(() => {
