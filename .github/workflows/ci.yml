@@ -12,6 +12,32 @@ jobs:
   test:
     name: Lint & Test
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: hubfyai_shadow
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: hubfyai_shadow
+      DATABASE_URL: mysql://root:root@localhost:3306/hubfyai_shadow
+      JWT_SECRET: test-secret-key
+      JWT_EXPIRES_IN: 7d
+      NODE_ENV: test
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,6 +53,21 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Wait for MySQL
+        run: |
+          until mysqladmin ping -h"localhost" -P"3306" -u"root" -p"root" --silent; do
+            echo 'Waiting for MySQL...'
+            sleep 2
+          done
+          echo 'MySQL is ready!'
+
+      - name: Run migrations
+        run: pnpm db:migrate
+        # Ajuste o comando acima conforme seu projeto:
+        # - Prisma: pnpm prisma migrate deploy
+        # - Drizzle: pnpm drizzle-kit push
+        # - Knex: pnpm knex migrate:latest
 
       - name: Lint
         run: pnpm lint
