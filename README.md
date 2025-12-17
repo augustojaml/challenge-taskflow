@@ -95,6 +95,10 @@ Browser
 | `pnpm test:e2e` | Caso de ponta com Supertest (lembre-se: roda `pnpm build` antes de executar). |
 | `pnpm test:components` | Testes de UI (Vitest + React Testing Library). |
 | `pnpm test:coverage` | Gera cobertura com `@vitest/coverage-v8`. |
+| `pnpm db:generate` | Gera o Prisma Client (lê o schema e atualiza o client em `node_modules`). |
+| `pnpm db:push` | Empurra o schema Prisma para o banco definido em `DATABASE_URL` (cria/atualiza tabelas sem migrations). |
+| `pnpm db:migrate` | Cria/atualiza migrations e aplica no banco (modo dev para gerar novos scripts). |
+| `pnpm db:studio` | Inicia o Prisma Studio para inspeção visual dos dados localmente. |
 
 ## Docker, banco e testes E2E
 1. `docker-compose.yml` orquestra o MySQL 8, monta volumes e aplica o script `database/mysql/init.sql`.
