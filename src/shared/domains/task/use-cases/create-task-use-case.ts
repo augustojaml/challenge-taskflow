@@ -21,7 +21,6 @@ class CreateTaskUseCase {
     if (!user) {
       throw new UnauthorizedError()
     }
-    console.log(data)
 
     const taskEntity = TaskEntity.create({
       userId: data.userId,

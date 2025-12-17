@@ -18,7 +18,6 @@ export const getResponseErrorCode = (
     INVALID_BID_AMOUNT: 'Valor do lance inválido',
     GENERIC_ERROR: 'Ocorreu um erro inesperado',
   }
-  console.log('Error received in getResponseErrorCode:', error)
 
   if (error instanceof AxiosError) {
     const responseData = error.response?.data as

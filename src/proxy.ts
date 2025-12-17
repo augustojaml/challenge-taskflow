@@ -28,7 +28,6 @@ const staticFileExtensions = [
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-  console.log(pathname)
 
   if (pathname === '/api/health') {
     return NextResponse.next()
