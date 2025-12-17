@@ -16,6 +16,7 @@ export default defineConfig([
     'dist/**',
     'coverage/**',
     'next-env.d.ts',
+    'src/shared/databases/prisma/generated/**/*',
   ]),
 
   // regras recomendadas do Next
