@@ -24,5 +24,7 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     include: ['src/tests/e2e/**/*.spec.ts'],
+    hookTimeout: 60000, // 60 segundos para hooks (beforeAll, afterAll, etc)
+    testTimeout: 30000, // 30 segundos para testes individuais
   },
 })

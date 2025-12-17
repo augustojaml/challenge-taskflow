@@ -37,7 +37,8 @@
     "**/*.mts",
     "**/*.ts",
     "**/*.tsx",
-    "vitest.setupts"
+    "vitest.setupts",
+    ".next/dev/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
