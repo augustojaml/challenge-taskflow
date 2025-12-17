@@ -115,6 +115,7 @@ JWT_EXPIRES_IN=7d
 | `GET` | `/api/swagger` + `/docs` | Swagger UI baseado em `swagger-jsdoc` anotado nas rotas | Pública | Docs interativas com todos os endpoints |
 
 **Eventos**: aplicação síncrona apenas (HTTP). Não há broker/filas/WebSocket neste MVP.
+**Documentação bônus:** a spec descrita acima também vive em API.md, que complementa o /docs com exemplos estáticos.
 
 ## Decisões e trade-offs 🧠
 - **Clean Architecture:** API Routes apenas disparam factories que chamam use cases → repositórios Prisma e entidades. Facilita testes unitários e reuso.
@@ -133,14 +134,13 @@ JWT_EXPIRES_IN=7d
 | Frontend (login/register/dashboard) | ✅ | Pages + modais, loading states, autenticação forçada pelo AuthProvider. |
 | Organização (controllers/services/repos etc.) | ✅ | APIs → services/DTOs → use cases → repositórios. |
 | Testes automatizados | ⚠️ | Suites unitárias completas, E2E limitado ao fluxo auth/tasks básico. |
-| Documentação da API (Swagger + README) | ✅ | Anotações `@swagger` + `/docs`. Falta `API.md` estático. |
+| Documentação da API (Swagger + README + API.md) | ƒo. | Anotações `@swagger`, `/docs` e o `API.md` estático com exemplos. |
 | Filtros/paginação na UI | ⚠️ | Backend suporta, mas UI ainda não expõe controles visíveis/pesquisa. |
 | Diferenciais (refresh tokens, CI, deploy) | ⚠️ | Swagger + Docker entregues; refresh tokens e CI/CD/dev deploy pendentes. |
 
 ## Problemas conhecidos 🐞
 - ⚠️ **Filtros e paginação não expostos no dashboard:** TaskService já aceita `page`, `size`, `status`, `title`, mas os controls não estão disponíveis ao usuário.
 - ⚠️ **Cobertura E2E parcial:** existe apenas um cenário que cria usuário, login e CRUD limitado; falta cobertura de rota protegida e fluxos completos.
-- ⚠️ **API.md não presente:** documentação interativa existe, mas o arquivo pedido ainda não foi escrito.
 - ⚠️ **Sem refresh tokens ou proteção CSRF:** foco em JWT simples para cumprir o escopo imediato do desafio.
 - ⚠️ **Testes de UI (React Testing Library) ausentes:** apenas use cases são testados; componentes e validações do formulário podem quebrar sem cobertura.
 
@@ -156,7 +156,7 @@ JWT_EXPIRES_IN=7d
 ## Próximos passos 🚀
 1. Colocar os filtros/pesquisa/paginação na UI de tarefas e alinhar com query params existentes.
 2. Expandir cobertura de testes: React Testing Library (formulários/dashboard) + testes de integração para todos os endpoints (Supertest) + novos cenários E2E.
-3. Gerar `API.md` estático e adicionar badge/cobertura de API no README.
+3. Consolidar a documentação (README, `/docs` e `API.md`) e promover os links em templates/processos de entrega.
 4. Automatizar pipeline (GitHub Actions) com `pnpm lint`, `pnpm test`, e publicar em Vercel/Railway quando estiver pronto.
 
 ## Tecnologias usadas 🛠️
